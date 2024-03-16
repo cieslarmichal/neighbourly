@@ -22,13 +22,11 @@ export class GroupTestUtils {
       group = {
         id: Generator.uuid(),
         name: input.group.name,
-        addressId: Generator.uuid(),
       };
     } else {
       group = {
         id: Generator.uuid(),
         name: await this.getNonClashingName(),
-        addressId: Generator.uuid(),
         ...input?.group,
       };
     }

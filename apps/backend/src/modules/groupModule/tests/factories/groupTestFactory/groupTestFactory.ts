@@ -8,7 +8,6 @@ export class GroupTestFactory {
     return {
       id: Generator.uuid(),
       name: Generator.word(),
-      addressId: Generator.uuid(),
       ...overrides,
     };
   }
@@ -17,7 +16,6 @@ export class GroupTestFactory {
     return new Group({
       id: Generator.uuid(),
       name: Generator.word(),
-      addressId: Generator.uuid(),
       ...overrides,
     });
   }

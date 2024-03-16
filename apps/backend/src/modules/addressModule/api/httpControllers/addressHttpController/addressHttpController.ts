@@ -159,6 +159,21 @@ export class AddressHttpController implements HttpController {
       id,
     });
 
+    if (address.getGroupId()) {
+      // TODO
+      // await this.accessControlService.verifyAccessToGroup({
+      //   groupId: address.getGroupId() as string,
+      //   authorizationHeader: request.headers['authorization'],
+      // });
+    }
+
+    if (address.getUserId()) {
+      await this.accessControlService.verifyBearerToken({
+        authorizationHeader: request.headers['authorization'],
+        expectedUserId: address.getUserId() as string,
+      });
+    }
+
     return {
       statusCode: HttpStatusCode.ok,
       body: this.mapToDto(address),

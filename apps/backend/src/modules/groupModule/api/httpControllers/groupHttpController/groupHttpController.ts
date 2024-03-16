@@ -182,11 +182,10 @@ export class GroupHttpController implements HttpController {
       authorizationHeader: request.headers['authorization'],
     });
 
-    const { name, addressId } = request.body;
+    const { name } = request.body;
 
     const { group } = await this.createGroupCommandHandler.execute({
       name,
-      addressId,
     });
 
     return {
@@ -287,7 +286,6 @@ export class GroupHttpController implements HttpController {
     return {
       id: group.getId(),
       name: group.getName(),
-      addressId: group.getAddressId(),
     };
   }
 }

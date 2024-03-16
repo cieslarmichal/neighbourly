@@ -131,12 +131,9 @@ describe('GroupRepositoryImpl', () => {
     it('creates Group', async () => {
       const name = Generator.word();
 
-      const addressId = Generator.uuid();
-
       const group = await groupRepository.saveGroup({
         group: {
           name,
-          addressId,
         },
       });
 
@@ -152,12 +149,9 @@ describe('GroupRepositoryImpl', () => {
     it('throws an error while creating - when Group with the same name already exists', async () => {
       const name = Generator.word();
 
-      const addressId = Generator.uuid();
-
       await groupRepository.saveGroup({
         group: {
           name,
-          addressId,
         },
       });
 
@@ -166,7 +160,6 @@ describe('GroupRepositoryImpl', () => {
           await groupRepository.saveGroup({
             group: {
               name,
-              addressId,
             },
           }),
       ).toThrowErrorInstance({
@@ -213,7 +206,6 @@ describe('GroupRepositoryImpl', () => {
             group: new Group({
               id: createdGroup1.id,
               name: createdGroup2.name,
-              addressId: createdGroup2.addressId,
             }),
           }),
       ).toThrowErrorInstance({

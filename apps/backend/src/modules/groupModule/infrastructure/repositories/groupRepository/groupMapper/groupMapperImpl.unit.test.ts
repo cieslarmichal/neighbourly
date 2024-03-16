@@ -21,7 +21,6 @@ describe('GroupMapperImpl', () => {
       id: groupEntity.id,
       state: {
         name: groupEntity.name,
-        addressId: groupEntity.addressId,
       },
     });
   });
@@ -34,7 +33,6 @@ describe('GroupMapperImpl', () => {
     expect(groupRawEntity).toEqual({
       id: group.getId(),
       name: group.getName(),
-      addressId: group.getAddressId(),
     });
   });
 });
