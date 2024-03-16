@@ -60,7 +60,6 @@ export class AddressHttpController implements HttpController {
           },
         },
         path: '/',
-        securityMode: SecurityMode.bearerToken,
       }),
       new HttpRoute({
         description: 'Update an address.',
@@ -104,10 +103,6 @@ export class AddressHttpController implements HttpController {
   private async createAddress(
     request: HttpRequest<CreateAddressBodyDTO>,
   ): Promise<HttpCreatedResponse<CreateAddressBodyCreatedResponseDTO>> {
-    await this.accessControlService.verifyBearerToken({
-      authorizationHeader: request.headers['authorization'],
-    });
-
     const { latitude, longitude, groupId, userId, city, postalCode, street } = request.body;
 
     const createdAddress = await this.createAddressCommandHandler.execute({
