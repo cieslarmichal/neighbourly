@@ -55,6 +55,9 @@ const configSchema = Type.Object({
     senderEmail: Type.String({ minLength: 1 }),
   }),
   frontendUrl: Type.String({ minLength: 1 }),
+  radiusLimit: Type.Number({
+    minimum: 1,
+  }),
 });
 
 export type Config = Static<typeof configSchema>;

@@ -9,6 +9,7 @@ import {
   type FindGroupsByIds,
   type SaveGroupPayload,
   type DeleteGroupPayload,
+  type FindGroupsWithinRadiusPayload,
 } from '../../../domain/repositories/groupRepository/groupRepository.js';
 import { type GroupRawEntity } from '../../databases/groupDatabase/tables/groupTable/groupRawEntity.js';
 import { groupTable } from '../../databases/groupDatabase/tables/groupTable/groupTable.js';
@@ -89,6 +90,36 @@ export class GroupRepositoryImpl implements GroupRepository {
       throw new RepositoryError({
         entity: 'Group',
         operation: 'find',
+        error,
+      });
+    }
+
+    return rawEntities.map((rawEntity) => this.groupMapper.mapToDomain(rawEntity));
+  }
+
+  public async findGroupsWithinRadius(payload: FindGroupsWithinRadiusPayload): Promise<Group[]> {
+    const { latitude, longitude, radius } = payload;
+
+    let rawEntities: GroupRawEntity[];
+
+    try {
+      rawEntities = await this.databaseClient<GroupRawEntity>(groupTable)
+        .select('groups.id', 'groups.name')
+        .join('addresses', (join) => {
+          join
+            .on('groups.id', '=', 'addresses.groupId')
+            .andOn(
+              this.databaseClient.raw(`ST_DistanceSphere(addresses.point, ST_SetSRID(ST_MakePoint(?, ?), 4326)) <= ?`, [
+                latitude,
+                longitude,
+                radius,
+              ]),
+            );
+        });
+    } catch (error) {
+      throw new RepositoryError({
+        entity: 'Group',
+        operation: 'findGroupsWithinRadius',
         error,
       });
     }

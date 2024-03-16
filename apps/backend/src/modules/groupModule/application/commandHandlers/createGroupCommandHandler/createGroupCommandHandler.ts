@@ -3,7 +3,6 @@ import { type Group } from '../../../domain/entities/group/group.js';
 
 export interface CreateGroupPayload {
   readonly name: string;
-  readonly addressId: string;
 }
 
 export interface CreateGroupResult {

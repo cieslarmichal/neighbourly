@@ -40,6 +40,8 @@ export * from './schemas/userGroup/findGroupsByUserId.js';
 
 export * from './schemas/userGroup/findUsersByGroupId.js';
 
+export * from './schemas/group/searchGroup.js';
+
 export * from './schemas/userGroup/updateUserGroup.js';
 
 export * from './schemas/userGroup/deleteUserGroup.js';
@@ -53,3 +55,11 @@ export * from './schemas/post/findPosts.js';
 export * from './schemas/post/updatePost.js';
 
 export * from './schemas/post/deletePost.js';
+
+export * from './schemas/address/address.js';
+
+export * from './schemas/address/findAddress.js';
+
+export * from './schemas/address/updateAddress.js';
+
+export * from './schemas/address/createAddress.js';

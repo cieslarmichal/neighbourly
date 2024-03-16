@@ -3,6 +3,7 @@ import { Application } from '../../src/core/application.js';
 import { coreSymbols } from '../../src/core/symbols.js';
 import { type DatabaseClient } from '../../src/libs/database/clients/databaseClient/databaseClient.js';
 import { type DependencyInjectionContainer } from '../../src/libs/dependencyInjection/dependencyInjectionContainer.js';
+import { AddressTestUtils } from '../../src/modules/addressModule/tests/utils/addressTestUtils/addressTestUtils.js';
 import { GroupTestUtils } from '../../src/modules/groupModule/tests/utils/groupTestUtils/groupTestUtils.js';
 import { PostTestUtils } from '../../src/modules/groupModule/tests/utils/postTestUtils/postTestUtils.js';
 import { UserGroupTestUtils } from '../../src/modules/userGroupModule/tests/utils/userGroupTestUtils/userGroupTestUtils.js';
@@ -44,6 +45,11 @@ export class TestContainer {
     container.bind<EmailEventTestUtils>(
       testSymbols.emailEventTestUtils,
       () => new EmailEventTestUtils(container.get<DatabaseClient>(coreSymbols.entityEventsDatabaseClient)),
+    );
+
+    container.bind<AddressTestUtils>(
+      testSymbols.addressTestUtils,
+      () => new AddressTestUtils(container.get<DatabaseClient>(coreSymbols.databaseClient)),
     );
 
     container.overrideBinding<EmailService>(userSymbols.emailService, () => ({

@@ -293,7 +293,6 @@ export class UserGroupHttpController implements HttpController {
     return {
       id: group.getId(),
       name: group.getName(),
-      addressId: group.getAddressId(),
     };
   }
 }

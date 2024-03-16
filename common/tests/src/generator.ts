@@ -106,4 +106,22 @@ export class Generator {
   public static userGroupRole(): string {
     return faker.helpers.arrayElement(['admin', 'user']);
   }
+
+  public static locationNearby(location: { latitude: number; longitude: number; radius?: number }): {
+    latitude: number;
+    longitude: number;
+  } {
+    const { latitude, longitude, radius = 1000 } = location;
+
+    const values = faker.location.nearbyGPSCoordinate({
+      isMetric: true,
+      origin: [latitude, longitude],
+      radius: radius / 1000,
+    });
+
+    return {
+      latitude: values[0],
+      longitude: values[1],
+    };
+  }
 }

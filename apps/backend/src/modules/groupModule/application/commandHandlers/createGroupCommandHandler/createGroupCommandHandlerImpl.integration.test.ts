@@ -35,7 +35,6 @@ describe('CreateGroupCommandHandlerImpl', () => {
       async () =>
         await commandHandler.execute({
           name: group.name,
-          addressId: group.addressId,
         }),
     ).toThrowErrorInstance({
       instance: OperationNotValidError,
@@ -49,11 +48,8 @@ describe('CreateGroupCommandHandlerImpl', () => {
   it('creates Group', async () => {
     const groupName = Generator.words(2);
 
-    const addressId = Generator.uuid();
-
     const { group } = await commandHandler.execute({
       name: groupName,
-      addressId,
     });
 
     expect(group.getName()).toEqual(groupName);

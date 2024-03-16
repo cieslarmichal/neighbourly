@@ -5,6 +5,7 @@ import { Generator } from '@common/tests';
 import { testSymbols } from '../../../../../../tests/container/symbols.js';
 import { TestContainer } from '../../../../../../tests/container/testContainer.js';
 import { RepositoryError } from '../../../../../common/errors/repositoryError.js';
+import { type AddressTestUtils } from '../../../../addressModule/tests/utils/addressTestUtils/addressTestUtils.js';
 import { Group } from '../../../domain/entities/group/group.js';
 import { type GroupRepository } from '../../../domain/repositories/groupRepository/groupRepository.js';
 import { symbols } from '../../../symbols.js';
@@ -17,6 +18,8 @@ describe('GroupRepositoryImpl', () => {
 
   let groupTestUtils: GroupTestUtils;
 
+  let addressTestUtils: AddressTestUtils;
+
   const groupTestFactory = new GroupTestFactory();
 
   beforeEach(() => {
@@ -25,10 +28,14 @@ describe('GroupRepositoryImpl', () => {
     groupRepository = container.get<GroupRepository>(symbols.groupRepository);
 
     groupTestUtils = container.get<GroupTestUtils>(testSymbols.groupTestUtils);
+
+    addressTestUtils = container.get<AddressTestUtils>(testSymbols.addressTestUtils);
   });
 
   afterEach(async () => {
     await groupTestUtils.truncate();
+
+    await addressTestUtils.truncate();
 
     await groupTestUtils.destroyDatabaseConnection();
   });
@@ -105,6 +112,86 @@ describe('GroupRepositoryImpl', () => {
     });
   });
 
+  describe('findGroupsWithinRadius', () => {
+    it('returns an empty array - when no Groups were found', async () => {
+      const latitude = Generator.number(-90, 90, 6);
+
+      const longitude = Generator.number(-180, 180, 6);
+
+      const radius = Generator.number(1, 10000);
+
+      const groups = await groupRepository.findGroupsWithinRadius({
+        latitude,
+        longitude,
+        radius,
+      });
+
+      expect(groups).toEqual([]);
+    });
+
+    it('returns groups found within radius', async () => {
+      const radius = Generator.number(100, 10000);
+
+      const group1 = await groupTestUtils.createAndPersist();
+
+      const group2 = await groupTestUtils.createAndPersist();
+
+      const group3 = await groupTestUtils.createAndPersist();
+
+      const location = {
+        latitude: Generator.number(-90, 90, 6),
+        longitude: Generator.number(-180, 180, 6),
+      };
+
+      await addressTestUtils.createAndPersist({
+        input: {
+          state: {
+            groupId: group1.id,
+            ...Generator.locationNearby({
+              latitude: location.latitude,
+              longitude: location.longitude,
+              radius,
+            }),
+          },
+        },
+      });
+
+      await addressTestUtils.createAndPersist({
+        input: {
+          state: {
+            groupId: group2.id,
+            ...Generator.locationNearby({
+              latitude: location.latitude,
+              longitude: location.longitude,
+              radius,
+            }),
+          },
+        },
+      });
+
+      await addressTestUtils.createAndPersist({
+        input: {
+          state: {
+            groupId: group3.id,
+            ...Generator.locationNearby({
+              latitude: location.latitude,
+              longitude: location.longitude,
+              radius,
+            }),
+          },
+        },
+      });
+
+      const groups = await groupRepository.findGroupsWithinRadius({
+        latitude: location.latitude,
+        longitude: location.longitude,
+        radius,
+      });
+
+      expect(groups.length).toBe(3);
+    });
+  });
+
   describe('findByName', () => {
     it('returns null - when Group was not found', async () => {
       const group = await groupRepository.findGroup({
@@ -131,12 +218,9 @@ describe('GroupRepositoryImpl', () => {
     it('creates Group', async () => {
       const name = Generator.word();
 
-      const addressId = Generator.uuid();
-
       const group = await groupRepository.saveGroup({
         group: {
           name,
-          addressId,
         },
       });
 
@@ -152,12 +236,9 @@ describe('GroupRepositoryImpl', () => {
     it('throws an error while creating - when Group with the same name already exists', async () => {
       const name = Generator.word();
 
-      const addressId = Generator.uuid();
-
       await groupRepository.saveGroup({
         group: {
           name,
-          addressId,
         },
       });
 
@@ -166,7 +247,6 @@ describe('GroupRepositoryImpl', () => {
           await groupRepository.saveGroup({
             group: {
               name,
-              addressId,
             },
           }),
       ).toThrowErrorInstance({
@@ -213,7 +293,6 @@ describe('GroupRepositoryImpl', () => {
             group: new Group({
               id: createdGroup1.id,
               name: createdGroup2.name,
-              addressId: createdGroup2.addressId,
             }),
           }),
       ).toThrowErrorInstance({
