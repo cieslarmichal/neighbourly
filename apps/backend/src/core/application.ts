@@ -55,7 +55,6 @@ export class Application {
     container.bind<DatabaseClient>(symbols.databaseClient, () =>
       DatabaseClientFactory.create({
         clientType: DatabaseClientType.postgres,
-        databaseName: 'neighbourly',
         minPoolConnections: 1,
         maxPoolConnections: 10,
         port: 5432,
@@ -66,7 +65,6 @@ export class Application {
     container.bind<DatabaseClient>(symbols.entityEventsDatabaseClient, () =>
       DatabaseClientFactory.create({
         clientType: DatabaseClientType.postgres,
-        databaseName: 'neighbourly',
         minPoolConnections: 1,
         maxPoolConnections: 10,
         port: 5432,

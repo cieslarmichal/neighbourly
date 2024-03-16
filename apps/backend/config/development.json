@@ -4,6 +4,7 @@
     "password": "admin"
   },
   "database": {
+    "databaseName": "neighbourly",
     "user": "local",
     "password": "local",
     "host": "localhost"
