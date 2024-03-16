@@ -46,13 +46,17 @@ export class PostRepositoryImpl implements PostRepository {
     return this.postMapper.mapToDomain(rawEntity);
   }
 
+  // TODO: add pagination
   public async findPosts(payload: FindPosts): Promise<Post[]> {
     const { groupId } = payload;
 
     let rawEntities: PostRawEntity[];
 
     try {
-      rawEntities = await this.databaseClient<PostRawEntity>(postTable).select('*').where({ groupId });
+      rawEntities = await this.databaseClient<PostRawEntity>(postTable)
+        .select('*')
+        .where({ groupId })
+        .orderBy('createdAt', 'desc');
     } catch (error) {
       throw new RepositoryError({
         entity: 'Post',
