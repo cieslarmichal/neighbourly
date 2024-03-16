@@ -1,12 +1,13 @@
 import { UseMutationOptions, useMutation } from '@tanstack/react-query';
 import { UserApiError } from '../../errors/userApiError';
 import { HttpService } from '../../../../core/services/httpService/httpService';
+import { RegisterUserResponseBody } from '@common/contracts';
 
 export const useRegisterUserMutation = (
-  options: UseMutationOptions<boolean, UserApiError, { email: string; password: string; name: string }>,
+  options: UseMutationOptions<string, UserApiError, { email: string; password: string; name: string }>,
 ) => {
   const registerUser = async (values: { email: string; password: string; name: string }) => {
-    const registerUserResponse = await HttpService.post({
+    const registerUserResponse = await HttpService.post<RegisterUserResponseBody>({
       url: '/users/register',
       body: {
         email: values.email,
@@ -26,7 +27,7 @@ export const useRegisterUserMutation = (
       });
     }
 
-    return true;
+    return registerUserResponse.body.id;
   };
 
   return useMutation({

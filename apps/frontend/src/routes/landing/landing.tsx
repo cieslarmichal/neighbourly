@@ -3,7 +3,6 @@ import { createRoute, useNavigate } from '@tanstack/react-router';
 import { rootRoute } from '../root';
 import { FC } from 'react';
 import { Button } from '../../components/ui/button';
-import { Logo } from '../../components/logo/logo';
 import { RequireNonAuthComponent } from '../../core/components/requireNonAuth/requireNonAuthComponent';
 
 export const LandingPage: FC = () => {
@@ -18,7 +17,7 @@ export const LandingPage: FC = () => {
               <div>
                 <p className="text-6xl sm:text-8xl font-semibold text-start ml-[-0.25rem] sm:ml-[-0.45rem]">neighbourly</p>
               </div>
-              <p className="text-xl sm:text-2xl text-start mt-3">Twoja prywatna biblioteka</p>
+              <p className="text-xl sm:text-2xl text-start mt-3">Get the feel for your local community!</p>
               <Button
                 className="w-60 sm:w-96 py-6 px-6 mt-8 sm:mt-16 text-sm sm:text-xl"
                 onClick={() =>
@@ -31,7 +30,6 @@ export const LandingPage: FC = () => {
               </Button>
             </div>
           </div>
-          <Logo />
         </div>
       </div>
     </div>
