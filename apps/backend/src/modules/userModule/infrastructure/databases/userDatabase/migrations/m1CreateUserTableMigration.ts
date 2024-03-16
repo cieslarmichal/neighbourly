@@ -20,14 +20,6 @@ export class M1CreateUserTableMigration implements Migration {
 
       table.unique(['email']);
     });
-
-    await databaseClient.schema.raw(`
-      CREATE TABLE "testGeom" (
-        id SERIAL PRIMARY KEY,
-        location GEOMETRY(POINT, 4326),
-        name TEXT
-      );
-    `);
   }
 
   public async down(databaseClient: DatabaseClient): Promise<void> {

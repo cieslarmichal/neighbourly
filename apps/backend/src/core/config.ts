@@ -28,7 +28,6 @@ const configSchema = Type.Object({
       minLength: 1,
     }),
   }),
-  queueDatabasePath: Type.String({ minLength: 1 }),
   hashSaltRounds: Type.Number({
     minimum: 5,
     maximum: 15,

@@ -7,6 +7,15 @@
 //   distance: number;
 // }
 
+// // Sample migration:
+// // await databaseClient.schema.raw(`
+// // CREATE TABLE "testGeom" (
+// //   id SERIAL PRIMARY KEY,
+// //   location GEOMETRY(POINT, 4326),
+// //   name TEXT
+// // );
+// // `);
+
 // export class TestRepository {
 //   private readonly tableName = 'testGeom';
 
@@ -16,10 +25,13 @@
 //     const { distance, lat, lon } = payload;
 
 //     try {
-//       const res = await this.databaseClient(this.tableName).whereRaw(
-//         `ST_DistanceSphere(location, ST_SetSRID(ST_MakePoint(?, ?), 4326)) <= ?`,
-//         [lat, lon, distance],
-//       );
+//       const res = await this.databaseClient(this.tableName)
+//         .whereRaw(`ST_DistanceSphere(location, ST_SetSRID(ST_MakePoint(?, ?), 4326)) <= ?`, [lat, lon, distance])
+//         .select([
+//           `name`,
+//           this.databaseClient.raw('ST_X(location) as lon'),
+//           this.databaseClient.raw(`ST_Y(location) as lat`),
+//         ]);
 
 //       return res;
 //     } catch (error) {
