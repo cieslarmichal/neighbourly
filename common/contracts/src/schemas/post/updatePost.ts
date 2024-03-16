@@ -1,7 +1,7 @@
 import { type Post } from './post.js';
 
 export interface UpdatePostPathParams {
-  readonly id: string;
+  readonly postId: string;
 }
 
 export interface UpdatePostRequestBody {

@@ -65,3 +65,11 @@ export * from './schemas/address/findAddress.js';
 export * from './schemas/address/updateAddress.js';
 
 export * from './schemas/address/createAddress.js';
+
+export * from './schemas/comment/createComment.js';
+
+export * from './schemas/comment/findComments.js';
+
+export * from './schemas/comment/updateComment.js';
+
+export * from './schemas/comment/deleteComment.js';
