@@ -1,0 +1,19 @@
+{
+  "name": "@common/tests",
+  "type": "module",
+  "exports": {
+    ".": "./dist/src/index.js"
+  },
+  "files": [
+    "/dist"
+  ],
+  "types": "dist/src/index.d.ts",
+  "private": true,
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "build:dev": "tsc --build tsconfig.json"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.3.1"
+  }
+}

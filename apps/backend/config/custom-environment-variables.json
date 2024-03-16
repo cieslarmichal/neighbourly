@@ -1,0 +1,19 @@
+{
+  "admin": {
+    "username": "ADMIN_USERNAME",
+    "password": "ADMIN_PASSWORD"
+  },
+  "logLevel": "LOG_LEVEL",
+  "databasePath": "DATABASE_PATH",
+  "queueDatabasePath": "QUEUE_DATABASE_PATH",
+  "token": {
+    "secret": "TOKEN_SECRET"
+  },
+  "sendGrid": {
+    "apiKey": "SENDGRID_API_KEY",
+    "senderEmail": "SENDGRID_SENDER_EMAIL"
+  },
+  "frontend": {
+    "url": "FRONTEND_URL"
+  }
+}

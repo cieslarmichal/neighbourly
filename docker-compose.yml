@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: neighbourly-backend
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    volumes:
+      - ./apps/backend/data:/app/apps/backend/data
+    ports:
+      - '5000:5000'
+
+  frontend:
+    container_name: neighbourly-frontend
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+    ports:
+      - '8080:8080'

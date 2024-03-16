@@ -1,0 +1,22 @@
+app = "neighbourly-frontend"
+primary_region = "waw"
+
+[build]
+  dockerfile = "./Dockerfile"
+  build-target = "static"
+
+[deploy]
+  strategy = "rolling"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = false
+  min_machines_running = 1
+  processes = ["app"]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512

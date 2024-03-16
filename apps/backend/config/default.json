@@ -1,0 +1,34 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": 5000
+  },
+  "admin": {
+    "username": null,
+    "password": null
+  },
+  "logLevel": "debug",
+  "databasePath": null,
+  "queueDatabasePath": null,
+  "hashSaltRounds": 10,
+  "token": {
+    "secret": null,
+    "access": {
+      "expiresIn": 86400
+    },
+    "refresh": {
+      "expiresIn": 604800
+    },
+    "emailVerification": {
+      "expiresIn": 86400
+    },
+    "resetPassword": {
+      "expiresIn": 3600
+    }
+  },
+  "sendGrid": {
+    "apiKey": null,
+    "senderEmail": "michal.andrzej.cielsar@gmail.com"
+  },
+  "frontendUrl": "https://neighbourly.com"
+}
