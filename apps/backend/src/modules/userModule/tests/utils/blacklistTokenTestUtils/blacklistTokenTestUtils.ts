@@ -1,6 +1,6 @@
 import { type SqliteDatabaseClient } from '../../../../../core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { type BlacklistTokenRawEntity } from '../../../infrastructure/databases/userDatabase/tables/blacklistTokenTable/blacklistTokenRawEntity.js';
-import { BlacklistTokenTable } from '../../../infrastructure/databases/userDatabase/tables/blacklistTokenTable/blacklistTokenTable.js';
+import { blacklistTokenTable } from '../../../infrastructure/databases/userDatabase/tables/blacklistTokenTable/blacklistTokenTable.js';
 import { BlacklistTokenTestFactory } from '../../factories/blacklistTokenTestFactory/blacklistTokenTestFactory.js';
 
 interface CreateAndPersistPayload {
@@ -16,7 +16,6 @@ interface FindByTokenPayload {
 }
 
 export class BlacklistTokenTestUtils {
-  private readonly databaseTable = new BlacklistTokenTable();
   private readonly blacklistTokenTestFactory = new BlacklistTokenTestFactory();
 
   public constructor(private readonly sqliteDatabaseClient: SqliteDatabaseClient) {}
@@ -26,7 +25,7 @@ export class BlacklistTokenTestUtils {
 
     const blacklistToken = this.blacklistTokenTestFactory.create(input);
 
-    const rawEntities = await this.sqliteDatabaseClient<BlacklistTokenRawEntity>(this.databaseTable.name).insert(
+    const rawEntities = await this.sqliteDatabaseClient<BlacklistTokenRawEntity>(blacklistTokenTable).insert(
       {
         id: blacklistToken.getId(),
         token: blacklistToken.getToken(),
@@ -47,13 +46,13 @@ export class BlacklistTokenTestUtils {
   public async persist(payload: PersistPayload): Promise<void> {
     const { blacklistToken } = payload;
 
-    await this.sqliteDatabaseClient<BlacklistTokenRawEntity>(this.databaseTable.name).insert(blacklistToken, '*');
+    await this.sqliteDatabaseClient<BlacklistTokenRawEntity>(blacklistTokenTable).insert(blacklistToken, '*');
   }
 
   public async findByToken(payload: FindByTokenPayload): Promise<BlacklistTokenRawEntity> {
     const { token } = payload;
 
-    const blacklistTokenRawEntity = (await this.sqliteDatabaseClient<BlacklistTokenRawEntity>(this.databaseTable.name)
+    const blacklistTokenRawEntity = (await this.sqliteDatabaseClient<BlacklistTokenRawEntity>(blacklistTokenTable)
       .select('*')
       .where({ token })
       .first()) as BlacklistTokenRawEntity;
@@ -66,6 +65,6 @@ export class BlacklistTokenTestUtils {
   }
 
   public async truncate(): Promise<void> {
-    await this.sqliteDatabaseClient<BlacklistTokenRawEntity>(this.databaseTable.name).truncate();
+    await this.sqliteDatabaseClient<BlacklistTokenRawEntity>(blacklistTokenTable).truncate();
   }
 }

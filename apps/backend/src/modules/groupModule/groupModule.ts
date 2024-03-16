@@ -6,6 +6,7 @@ import { DeleteGroupCommandHandlerImpl } from './application/commandHandlers/del
 import { type UpdateGroupNameCommandHandler } from './application/commandHandlers/updateGroupNameCommandHandler/updateGroupNameCommandHandler.js';
 import { UpdateGroupNameCommandHandlerImpl } from './application/commandHandlers/updateGroupNameCommandHandler/updateGroupNameCommandHandlerImpl.js';
 import { type FindGroupByIdQueryHandler } from './application/queryHandlers/findGroupByIdQueryHandler/findGroupByIdQueryHandler.js';
+import { FindGroupByIdQueryHandlerImpl } from './application/queryHandlers/findGroupByIdQueryHandler/findGroupByIdQueryHandlerImpl.js';
 import { type FindGroupByNameQueryHandler } from './application/queryHandlers/findGroupByNameQueryHandler/findGroupByNameQueryHandler.js';
 import { FindGroupByNameQueryHandlerImpl } from './application/queryHandlers/findGroupByNameQueryHandler/findGroupByNameQueryHandlerImpl.js';
 import { type FindGroupsQueryHandler } from './application/queryHandlers/findGroupsQueryHandler/findGroupsQueryHandler.js';
@@ -82,6 +83,11 @@ export class GroupModule implements DependencyInjectionModule {
     container.bind<FindGroupByNameQueryHandler>(
       symbols.findGroupByNameQueryHandler,
       () => new FindGroupByNameQueryHandlerImpl(container.get<GroupRepository>(symbols.groupRepository)),
+    );
+
+    container.bind<FindGroupByIdQueryHandler>(
+      symbols.findGroupByIdQueryHandler,
+      () => new FindGroupByIdQueryHandlerImpl(container.get<GroupRepository>(symbols.groupRepository)),
     );
 
     container.bind<FindGroupsQueryHandler>(

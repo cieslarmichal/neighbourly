@@ -11,7 +11,7 @@ import {
   type DeleteGroupPayload,
 } from '../../../domain/repositories/groupRepository/groupRepository.js';
 import { type GroupRawEntity } from '../../databases/groupDatabase/tables/groupTable/groupRawEntity.js';
-import { groupTableName } from '../../databases/groupDatabase/tables/groupTable/groupTable.js';
+import { groupTable } from '../../databases/groupDatabase/tables/groupTable/groupTable.js';
 
 type CreateGroupPayload = { group: GroupState };
 
@@ -28,7 +28,7 @@ export class GroupRepositoryImpl implements GroupRepository {
     let rawEntities: GroupRawEntity[];
 
     try {
-      rawEntities = await this.databaseClient<GroupRawEntity>(groupTableName).select('*');
+      rawEntities = await this.databaseClient<GroupRawEntity>(groupTable).select('*');
     } catch (error) {
       throw new RepositoryError({
         entity: 'Group',
@@ -62,7 +62,7 @@ export class GroupRepositoryImpl implements GroupRepository {
     }
 
     try {
-      rawEntity = await this.databaseClient<GroupRawEntity>(groupTableName).select('*').where(whereCondition).first();
+      rawEntity = await this.databaseClient<GroupRawEntity>(groupTable).select('*').where(whereCondition).first();
     } catch (error) {
       throw new RepositoryError({
         entity: 'Group',
@@ -84,7 +84,7 @@ export class GroupRepositoryImpl implements GroupRepository {
     let rawEntities: GroupRawEntity[];
 
     try {
-      rawEntities = await this.databaseClient<GroupRawEntity>(groupTableName).select('*').whereIn('id', ids);
+      rawEntities = await this.databaseClient<GroupRawEntity>(groupTable).select('*').whereIn('id', ids);
     } catch (error) {
       throw new RepositoryError({
         entity: 'Group',
@@ -112,7 +112,7 @@ export class GroupRepositoryImpl implements GroupRepository {
     let rawEntities: GroupRawEntity[];
 
     try {
-      rawEntities = await this.databaseClient<GroupRawEntity>(groupTableName)
+      rawEntities = await this.databaseClient<GroupRawEntity>(groupTable)
         .insert({
           id: this.uuidService.generateUuid(),
           ...group,
@@ -137,7 +137,7 @@ export class GroupRepositoryImpl implements GroupRepository {
     let rawEntities: GroupRawEntity[];
 
     try {
-      rawEntities = await this.databaseClient<GroupRawEntity>(groupTableName)
+      rawEntities = await this.databaseClient<GroupRawEntity>(groupTable)
         .update(group.getState())
         .where({ id: group.getId() })
         .returning('*');
@@ -158,7 +158,7 @@ export class GroupRepositoryImpl implements GroupRepository {
     const { id } = payload;
 
     try {
-      await this.databaseClient<GroupRawEntity>(groupTableName).delete().where({ id });
+      await this.databaseClient<GroupRawEntity>(groupTable).delete().where({ id });
     } catch (error) {
       throw new RepositoryError({
         entity: 'Group',

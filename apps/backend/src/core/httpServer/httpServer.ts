@@ -15,6 +15,8 @@ import { HttpStatusCode } from '../../common/types/http/httpStatusCode.js';
 import { SecurityMode } from '../../common/types/http/securityMode.js';
 import { type DependencyInjectionContainer } from '../../libs/dependencyInjection/dependencyInjectionContainer.js';
 import { type LoggerService } from '../../libs/logger/services/loggerService/loggerService.js';
+import { type GroupHttpController } from '../../modules/groupModule/api/httpControllers/groupHttpController/groupHttpController.js';
+import { groupSymbols } from '../../modules/groupModule/symbols.js';
 import { type UserHttpController } from '../../modules/userModule/api/httpControllers/userHttpController/userHttpController.js';
 import { userSymbols } from '../../modules/userModule/symbols.js';
 import { type ApplicationHttpController } from '../api/httpControllers/applicationHttpController/applicationHttpController.js';
@@ -45,6 +47,7 @@ export class HttpServer {
     return [
       this.container.get<UserHttpController>(userSymbols.userHttpController),
       this.container.get<ApplicationHttpController>(symbols.applicationHttpController),
+      this.container.get<GroupHttpController>(groupSymbols.groupHttpController),
     ];
   }
 

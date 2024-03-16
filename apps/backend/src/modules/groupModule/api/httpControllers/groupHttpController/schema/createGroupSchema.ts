@@ -10,6 +10,7 @@ export const createGroupBodyDTOSchema = Type.Object({
     minLength: 1,
     maxLength: 64,
   }),
+  addressId: Type.String({ format: 'uuid' }),
 });
 
 export type CreateGroupBodyDTO = TypeExtends<contracts.CreateGroupRequestBody, Static<typeof createGroupBodyDTOSchema>>;

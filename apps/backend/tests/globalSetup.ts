@@ -1,4 +1,5 @@
 import { Application } from '../src/core/application.js';
+import { GroupDatabaseManager } from '../src/modules/groupModule/infrastructure/databases/groupDatabase/groupDatabaseManager.js';
 import { UserDatabaseManager } from '../src/modules/userModule/infrastructure/databases/userDatabase/userDatabaseManager.js';
 import { UserEventsDatabaseManager } from '../src/modules/userModule/infrastructure/databases/userEventsDatabase/userEventsDatabaseManager.js';
 
@@ -8,9 +9,7 @@ export async function setup(): Promise<void> {
 
     const eventsDatabaseManagers = [UserEventsDatabaseManager];
 
-    const databaseManagers = [
-      UserDatabaseManager,
-    ];
+    const databaseManagers = [UserDatabaseManager, GroupDatabaseManager];
 
     for (const databaseManager of databaseManagers) {
       await databaseManager.bootstrapDatabase(container);

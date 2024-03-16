@@ -11,6 +11,20 @@ import {
   type DeleteGroupResponseBodyDTO,
 } from './schema/deleteGroupSchema.js';
 import {
+  findGroupByIdPathParamsDTOSchema,
+  findGroupByIdResponseBodyDTOSchema,
+  type FindGroupByIdPathParamsDTO,
+  type FindGroupByIdResponseBodyDTO,
+} from './schema/findGroupByIdSchema.js';
+import {
+  findGroupByNameQueryParamsDTOSchema,
+  findGroupByNameResponseBodyDTOSchema,
+  type FindGroupByNameQueryParamsDTO,
+  type FindGroupByNameResponseBodyDTO,
+} from './schema/findGroupByNameSchema.js';
+import { findGroupsResponseBodyDTOSchema, type FindGroupsResponseBodyDTO } from './schema/findGroupsSchema.js';
+import { type GroupDTO } from './schema/groupDTO.js';
+import {
   type UpdateGroupNameBodyDTO,
   type UpdateGroupNameResponseBodyDTO,
   type UpdateGroupNamePathParamsDTO,
@@ -169,9 +183,12 @@ export class GroupHttpController implements HttpController {
       authorizationHeader: request.headers['authorization'],
     });
 
-    const { name } = request.body;
+    const { name, addressId } = request.body;
 
-    const { group } = await this.createGroupCommandHandler.execute({ name });
+    const { group } = await this.createGroupCommandHandler.execute({
+      name,
+      addressId,
+    });
 
     return {
       body: this.mapGroupToDTO(group),
@@ -271,6 +288,7 @@ export class GroupHttpController implements HttpController {
     return {
       id: group.getId(),
       name: group.getName(),
+      addressId: group.getAddressId(),
     };
   }
 }

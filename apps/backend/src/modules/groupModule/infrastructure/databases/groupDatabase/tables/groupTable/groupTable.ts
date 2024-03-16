@@ -1,1 +1,1 @@
-export const groupTableName = 'groups';
+export const groupTable = 'groups';

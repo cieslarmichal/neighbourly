@@ -31,7 +31,13 @@ describe('CreateGroupCommandHandlerImpl', () => {
   it('throws an error - when Group already exists', async () => {
     const group = await groupTestUtils.createAndPersist();
 
-    await expect(async () => await commandHandler.execute({ name: group.name })).toThrowErrorInstance({
+    await expect(
+      async () =>
+        await commandHandler.execute({
+          name: group.name,
+          addressId: group.addressId,
+        }),
+    ).toThrowErrorInstance({
       instance: OperationNotValidError,
       context: {
         reason: 'Group already exists.',
@@ -43,7 +49,12 @@ describe('CreateGroupCommandHandlerImpl', () => {
   it('creates Group', async () => {
     const groupName = Generator.words(2);
 
-    const { group } = await commandHandler.execute({ name: groupName });
+    const addressId = Generator.uuid();
+
+    const { group } = await commandHandler.execute({
+      name: groupName,
+      addressId,
+    });
 
     expect(group.getName()).toEqual(groupName);
 

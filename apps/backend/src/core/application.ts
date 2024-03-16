@@ -17,13 +17,15 @@ import { type SendGridService } from '../libs/sendGrid/services/sendGridService/
 import { type UuidService } from '../libs/uuid/services/uuidService/uuidService.js';
 import { UuidServiceImpl } from '../libs/uuid/services/uuidService/uuidServiceImpl.js';
 import { AuthModule } from '../modules/authModule/authModule.js';
+import { GroupModule } from '../modules/groupModule/groupModule.js';
+import { GroupDatabaseManager } from '../modules/groupModule/infrastructure/databases/groupDatabase/groupDatabaseManager.js';
 import { UserDatabaseManager } from '../modules/userModule/infrastructure/databases/userDatabase/userDatabaseManager.js';
 import { UserEventsDatabaseManager } from '../modules/userModule/infrastructure/databases/userEventsDatabase/userEventsDatabaseManager.js';
 import { UserModule } from '../modules/userModule/userModule.js';
 
 export class Application {
   private static async setupDatabase(container: DependencyInjectionContainer): Promise<void> {
-    const coreDatabaseManagers = [UserDatabaseManager];
+    const coreDatabaseManagers = [UserDatabaseManager, GroupDatabaseManager];
 
     const eventsDatabaseManagers = [UserEventsDatabaseManager];
 
@@ -45,7 +47,7 @@ export class Application {
   }
 
   public static createContainer(): DependencyInjectionContainer {
-    const modules: DependencyInjectionModule[] = [new UserModule(), new AuthModule()];
+    const modules: DependencyInjectionModule[] = [new UserModule(), new AuthModule(), new GroupModule()];
 
     const container = DependencyInjectionContainerFactory.create({ modules });
 
@@ -63,7 +65,7 @@ export class Application {
 
     container.bind<Config>(symbols.config, () => config);
 
-    container.bind<SqliteDatabaseClient>(symbols.sqliteDatabaseClient, () =>
+    container.bind<SqliteDatabaseClient>(symbols.databaseClient, () =>
       SqliteDatabaseClientFactory.create({ databasePath: config.databasePath }),
     );
 

@@ -2,7 +2,7 @@ import { Generator } from '@common/tests';
 
 import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
 import { type GroupRawEntity } from '../../../infrastructure/databases/groupDatabase/tables/groupTable/groupRawEntity.js';
-import { groupTableName } from '../../../infrastructure/databases/groupDatabase/tables/groupTable/groupTable.js';
+import { groupTable } from '../../../infrastructure/databases/groupDatabase/tables/groupTable/groupTable.js';
 
 interface CreateAndPersistPayload {
   readonly input?: {
@@ -33,25 +33,25 @@ export class GroupTestUtils {
       };
     }
 
-    await this.databaseClient<GroupRawEntity>(groupTableName).insert(group);
+    await this.databaseClient<GroupRawEntity>(groupTable).insert(group);
 
     return group;
   }
 
   public async findByName(name: string): Promise<GroupRawEntity | null> {
-    const group = await this.databaseClient<GroupRawEntity>(groupTableName).where({ name }).first();
+    const group = await this.databaseClient<GroupRawEntity>(groupTable).where({ name }).first();
 
     return group || null;
   }
 
   public async findById(id: string): Promise<GroupRawEntity | null> {
-    const group = await this.databaseClient<GroupRawEntity>(groupTableName).where({ id }).first();
+    const group = await this.databaseClient<GroupRawEntity>(groupTable).where({ id }).first();
 
     return group || null;
   }
 
   public async truncate(): Promise<void> {
-    await this.databaseClient<GroupRawEntity>(groupTableName).truncate();
+    await this.databaseClient<GroupRawEntity>(groupTable).truncate();
   }
 
   public async destroyDatabaseConnection(): Promise<void> {

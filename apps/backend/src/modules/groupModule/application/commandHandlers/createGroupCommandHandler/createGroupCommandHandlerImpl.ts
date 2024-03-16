@@ -14,13 +14,14 @@ export class CreateGroupCommandHandlerImpl implements CreateGroupCommandHandler 
   ) {}
 
   public async execute(payload: CreateGroupPayload): Promise<CreateGroupResult> {
-    const { name } = payload;
+    const { name, addressId } = payload;
 
     const normalizedName = name.toLowerCase();
 
     this.loggerService.debug({
       message: 'Creating Group...',
       name,
+      addressId,
     });
 
     const groupExists = await this.groupRepository.findGroup({
@@ -37,6 +38,7 @@ export class CreateGroupCommandHandlerImpl implements CreateGroupCommandHandler 
     const group = await this.groupRepository.saveGroup({
       group: {
         name: normalizedName,
+        addressId,
       },
     });
 
