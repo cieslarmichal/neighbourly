@@ -11,5 +11,3 @@ services:
       - POSTGRES_USER=local
       - POSTGRES_PASSWORD=local
       - POSTGRES_DB=neighbourly
-    volumes:
-      - ./data:/var/lib/postgresql/data

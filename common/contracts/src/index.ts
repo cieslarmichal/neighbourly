@@ -43,3 +43,13 @@ export * from './schemas/userGroup/findUsersByGroupId.js';
 export * from './schemas/userGroup/updateUserGroup.js';
 
 export * from './schemas/userGroup/deleteUserGroup.js';
+
+export * from './schemas/post/createPost.js';
+
+export * from './schemas/post/findPosts.js';
+
+export * from './schemas/post/findPosts.js';
+
+export * from './schemas/post/updatePost.js';
+
+export * from './schemas/post/deletePost.js';
