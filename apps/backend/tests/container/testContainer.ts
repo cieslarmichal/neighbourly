@@ -4,6 +4,7 @@ import { coreSymbols } from '../../src/core/symbols.js';
 import { type DatabaseClient } from '../../src/libs/database/clients/databaseClient/databaseClient.js';
 import { type DependencyInjectionContainer } from '../../src/libs/dependencyInjection/dependencyInjectionContainer.js';
 import { GroupTestUtils } from '../../src/modules/groupModule/tests/utils/groupTestUtils/groupTestUtils.js';
+import { PostTestUtils } from '../../src/modules/groupModule/tests/utils/postTestUtils/postTestUtils.js';
 import { UserGroupTestUtils } from '../../src/modules/userGroupModule/tests/utils/userGroupTestUtils/userGroupTestUtils.js';
 import { type EmailService } from '../../src/modules/userModule/application/services/emailService/emailService.js';
 import { symbols as userSymbols } from '../../src/modules/userModule/symbols.js';
@@ -14,6 +15,11 @@ import { UserTestUtils } from '../../src/modules/userModule/tests/utils/userTest
 export class TestContainer {
   public static create(): DependencyInjectionContainer {
     const container = Application.createContainer();
+
+    container.bind<PostTestUtils>(
+      testSymbols.postTestUtils,
+      () => new PostTestUtils(container.get<DatabaseClient>(coreSymbols.databaseClient)),
+    );
 
     container.bind<UserGroupTestUtils>(
       testSymbols.userGroupTestUtils,

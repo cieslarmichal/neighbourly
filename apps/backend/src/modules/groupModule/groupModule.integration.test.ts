@@ -1,6 +1,7 @@
 import { beforeEach, expect, describe, it } from 'vitest';
 
 import { GroupHttpController } from './api/httpControllers/groupHttpController/groupHttpController.js';
+import { PostHttpController } from './api/httpControllers/postHttpController/postHttpController.js';
 import { groupSymbols } from './symbols.js';
 import { Application } from '../../core/application.js';
 import { type DependencyInjectionContainer } from '../../libs/dependencyInjection/dependencyInjectionContainer.js';
@@ -14,5 +15,7 @@ describe('GroupModule', () => {
 
   it('declares bindings', async () => {
     expect(container.get<GroupHttpController>(groupSymbols.groupHttpController)).toBeInstanceOf(GroupHttpController);
+
+    expect(container.get<PostHttpController>(groupSymbols.postHttpController)).toBeInstanceOf(PostHttpController);
   });
 });

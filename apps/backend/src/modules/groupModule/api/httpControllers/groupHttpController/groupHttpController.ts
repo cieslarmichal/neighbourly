@@ -83,7 +83,7 @@ export class GroupHttpController implements HttpController {
             },
           },
         },
-        securityMode: SecurityMode.basicAuth,
+        securityMode: SecurityMode.bearerToken,
       }),
       new HttpRoute({
         description: 'Update Group name.',
@@ -101,7 +101,7 @@ export class GroupHttpController implements HttpController {
             },
           },
         },
-        securityMode: SecurityMode.basicAuth,
+        securityMode: SecurityMode.bearerToken,
         path: ':id/name',
       }),
       new HttpRoute({
@@ -178,7 +178,7 @@ export class GroupHttpController implements HttpController {
   private async createGroup(
     request: HttpRequest<CreateGroupBodyDTO>,
   ): Promise<HttpCreatedResponse<CreateGroupResponseBodyDTO>> {
-    this.accessControlService.verifyBasicAuth({
+    this.accessControlService.verifyBearerToken({
       authorizationHeader: request.headers['authorization'],
     });
 
@@ -198,7 +198,7 @@ export class GroupHttpController implements HttpController {
   private async updateGroupName(
     request: HttpRequest<UpdateGroupNameBodyDTO, null, UpdateGroupNamePathParamsDTO>,
   ): Promise<HttpOkResponse<UpdateGroupNameResponseBodyDTO>> {
-    this.accessControlService.verifyBasicAuth({
+    this.accessControlService.verifyBearerToken({
       authorizationHeader: request.headers['authorization'],
     });
 
@@ -220,7 +220,7 @@ export class GroupHttpController implements HttpController {
   private async deleteGroup(
     request: HttpRequest<null, null, DeleteGroupPathParamsDTO>,
   ): Promise<HttpNoContentResponse<DeleteGroupResponseBodyDTO>> {
-    this.accessControlService.verifyBasicAuth({
+    this.accessControlService.verifyBearerToken({
       authorizationHeader: request.headers['authorization'],
     });
 
