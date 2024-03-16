@@ -87,6 +87,6 @@ export class UserTestUtils {
   }
 
   public async truncate(): Promise<void> {
-    await this.databaseClient<UserRawEntity>(userTable).truncate();
+    await this.databaseClient<UserRawEntity>(userTable).delete();
   }
 }

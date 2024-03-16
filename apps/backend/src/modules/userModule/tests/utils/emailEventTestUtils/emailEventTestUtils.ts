@@ -49,6 +49,6 @@ export class EmailEventTestUtils {
   }
 
   public async truncate(): Promise<void> {
-    await this.databaseClient(emailEventTable).truncate();
+    await this.databaseClient(emailEventTable).delete();
   }
 }

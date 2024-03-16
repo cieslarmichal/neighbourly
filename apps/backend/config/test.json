@@ -3,6 +3,12 @@
     "username": "admin",
     "password": "admin"
   },
+  "database": {
+    "databaseName": "neighbourly",
+    "user": "local",
+    "password": "local",
+    "host": "localhost"
+  },
   "token": {
     "secret": "12321313423565365654546654121890008"
   },

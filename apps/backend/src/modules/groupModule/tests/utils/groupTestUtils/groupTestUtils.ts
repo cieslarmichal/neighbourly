@@ -51,7 +51,7 @@ export class GroupTestUtils {
   }
 
   public async truncate(): Promise<void> {
-    await this.databaseClient<GroupRawEntity>(groupTable).truncate();
+    await this.databaseClient<GroupRawEntity>(groupTable).delete();
   }
 
   public async destroyDatabaseConnection(): Promise<void> {
