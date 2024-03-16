@@ -65,6 +65,6 @@ export class BlacklistTokenTestUtils {
   }
 
   public async truncate(): Promise<void> {
-    await this.databaseClient<BlacklistTokenRawEntity>(blacklistTokenTable).truncate();
+    await this.databaseClient<BlacklistTokenRawEntity>(blacklistTokenTable).delete();
   }
 }

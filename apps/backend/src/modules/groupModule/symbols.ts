@@ -16,4 +16,5 @@ export const symbols = {
 export const groupSymbols = {
   groupHttpController: symbols.groupHttpController,
   groupRepository: symbols.groupRepository,
+  groupMapper: symbols.groupMapper,
 };

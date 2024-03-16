@@ -35,5 +35,6 @@ export const symbols = {
 export const userSymbols = {
   userHttpController: symbols.userHttpController,
   userRepository: symbols.userRepository,
+  userMapper: symbols.userMapper,
   emailQueueController: symbols.emailQueueController,
 };

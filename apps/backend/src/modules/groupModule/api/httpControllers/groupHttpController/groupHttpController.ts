@@ -84,7 +84,6 @@ export class GroupHttpController implements HttpController {
           },
         },
         securityMode: SecurityMode.basicAuth,
-        path: 'create',
       }),
       new HttpRoute({
         description: 'Update Group name.',
