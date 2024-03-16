@@ -1,3 +1,3 @@
 export interface DeletePostPathParams {
-  readonly id: string;
+  readonly postId: string;
 }

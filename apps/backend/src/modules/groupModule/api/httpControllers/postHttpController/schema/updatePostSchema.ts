@@ -6,7 +6,7 @@ import { postDTO } from './postDTO.js';
 import { type TypeExtends } from '../../../../../../common/types/schemaExtends.js';
 
 export const updatePostPathParamsDTOSchema = Type.Object({
-  id: Type.String({ format: 'uuid' }),
+  postId: Type.String({ format: 'uuid' }),
 });
 
 export type UpdatePostPathParamsDTO = TypeExtends<
