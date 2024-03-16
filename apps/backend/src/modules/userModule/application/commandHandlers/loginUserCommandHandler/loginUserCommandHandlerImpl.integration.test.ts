@@ -4,8 +4,8 @@ import { type LoginUserCommandHandler } from './loginUserCommandHandler.js';
 import { testSymbols } from '../../../../../../tests/container/symbols.js';
 import { TestContainer } from '../../../../../../tests/container/testContainer.js';
 import { type Config } from '../../../../../core/config.js';
-import { type SqliteDatabaseClient } from '../../../../../core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../../../../core/symbols.js';
+import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
 import { ForbiddenAccessError } from '../../../../authModule/application/errors/forbiddenAccessError.js';
 import { UnauthorizedAccessError } from '../../../../authModule/application/errors/unathorizedAccessError.js';
 import { type TokenService } from '../../../../authModule/application/services/tokenService/tokenService.js';
@@ -18,7 +18,7 @@ import { type HashService } from '../../services/hashService/hashService.js';
 describe('LoginUserCommandHandler', () => {
   let loginUserCommandHandler: LoginUserCommandHandler;
 
-  let sqliteDatabaseClient: SqliteDatabaseClient;
+  let databaseClient: DatabaseClient;
 
   let userTestUtils: UserTestUtils;
 
@@ -41,7 +41,7 @@ describe('LoginUserCommandHandler', () => {
 
     hashService = container.get<HashService>(symbols.hashService);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
+    databaseClient = container.get<DatabaseClient>(coreSymbols.databaseClient);
 
     userTestUtils = container.get<UserTestUtils>(testSymbols.userTestUtils);
 
@@ -51,7 +51,7 @@ describe('LoginUserCommandHandler', () => {
   afterEach(async () => {
     await userTestUtils.truncate();
 
-    await sqliteDatabaseClient.destroy();
+    await databaseClient.destroy();
   });
 
   it('returns tokens', async () => {

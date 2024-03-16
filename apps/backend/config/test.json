@@ -3,8 +3,6 @@
     "username": "admin",
     "password": "admin"
   },
-  "databasePath": "data/test.db",
-  "queueDatabasePath": "data/test-queue.db",
   "token": {
     "secret": "12321313423565365654546654121890008"
   },

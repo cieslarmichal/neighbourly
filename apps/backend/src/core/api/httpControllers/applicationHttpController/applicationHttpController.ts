@@ -4,13 +4,13 @@ import { HttpMethodName } from '../../../../common/types/http/httpMethodName.js'
 import { type HttpOkResponse } from '../../../../common/types/http/httpResponse.js';
 import { HttpRoute } from '../../../../common/types/http/httpRoute.js';
 import { HttpStatusCode } from '../../../../common/types/http/httpStatusCode.js';
-import { type SqliteDatabaseClient } from '../../../database/sqliteDatabaseClient/sqliteDatabaseClient.js';
+import { type DatabaseClient } from '../../../../libs/database/clients/databaseClient/databaseClient.js';
 
 export class ApplicationHttpController implements HttpController {
   public readonly basePath = '/health';
   public readonly tags = ['Health'];
 
-  public constructor(private readonly sqliteDatabaseClient: SqliteDatabaseClient) {}
+  public constructor(private readonly databaseClient: DatabaseClient) {}
 
   public getHttpRoutes(): HttpRoute[] {
     return [
@@ -52,7 +52,7 @@ export class ApplicationHttpController implements HttpController {
 
   private async checkDatabaseHealth(): Promise<boolean> {
     try {
-      await this.sqliteDatabaseClient.raw('SELECT 1');
+      await this.databaseClient.raw('SELECT 1');
 
       return true;
     } catch (error) {

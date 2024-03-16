@@ -2,8 +2,8 @@ import { beforeEach, afterEach, expect, describe, it } from 'vitest';
 
 import { RepositoryError } from '../../../../../common/errors/repositoryError.js';
 import { Application } from '../../../../../core/application.js';
-import { type SqliteDatabaseClient } from '../../../../../core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../../../../core/symbols.js';
+import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
 import { type BlacklistTokenRepository } from '../../../domain/repositories/blacklistTokenRepository/blacklistTokenRepository.js';
 import { symbols } from '../../../symbols.js';
 import { BlacklistTokenTestFactory } from '../../../tests/factories/blacklistTokenTestFactory/blacklistTokenTestFactory.js';
@@ -12,7 +12,7 @@ import { BlacklistTokenTestUtils } from '../../../tests/utils/blacklistTokenTest
 describe('BlacklistTokenRepositoryImpl', () => {
   let blacklistTokenRepository: BlacklistTokenRepository;
 
-  let sqliteDatabaseClient: SqliteDatabaseClient;
+  let databaseClient: DatabaseClient;
 
   let blacklistTokenTestUtils: BlacklistTokenTestUtils;
 
@@ -23,9 +23,9 @@ describe('BlacklistTokenRepositoryImpl', () => {
 
     blacklistTokenRepository = container.get<BlacklistTokenRepository>(symbols.blacklistTokenRepository);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
+    databaseClient = container.get<DatabaseClient>(coreSymbols.databaseClient);
 
-    blacklistTokenTestUtils = new BlacklistTokenTestUtils(sqliteDatabaseClient);
+    blacklistTokenTestUtils = new BlacklistTokenTestUtils(databaseClient);
 
     await blacklistTokenTestUtils.truncate();
   });
@@ -33,7 +33,7 @@ describe('BlacklistTokenRepositoryImpl', () => {
   afterEach(async () => {
     await blacklistTokenTestUtils.truncate();
 
-    await sqliteDatabaseClient.destroy();
+    await databaseClient.destroy();
   });
 
   describe('Create', () => {

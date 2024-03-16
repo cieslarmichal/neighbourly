@@ -3,8 +3,8 @@ import { beforeEach, afterEach, expect, it, describe } from 'vitest';
 import { type FindUserQueryHandler } from './findUserQueryHandler.js';
 import { ResourceNotFoundError } from '../../../../../common/errors/resourceNotFoundError.js';
 import { Application } from '../../../../../core/application.js';
-import { type SqliteDatabaseClient } from '../../../../../core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../../../../core/symbols.js';
+import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
 import { symbols } from '../../../symbols.js';
 import { UserTestFactory } from '../../../tests/factories/userTestFactory/userTestFactory.js';
 import { UserTestUtils } from '../../../tests/utils/userTestUtils/userTestUtils.js';
@@ -12,7 +12,7 @@ import { UserTestUtils } from '../../../tests/utils/userTestUtils/userTestUtils.
 describe('FindUserQueryHandler', () => {
   let findUserQueryHandler: FindUserQueryHandler;
 
-  let sqliteDatabaseClient: SqliteDatabaseClient;
+  let databaseClient: DatabaseClient;
 
   let userTestUtils: UserTestUtils;
 
@@ -23,9 +23,9 @@ describe('FindUserQueryHandler', () => {
 
     findUserQueryHandler = container.get<FindUserQueryHandler>(symbols.findUserQueryHandler);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
+    databaseClient = container.get<DatabaseClient>(coreSymbols.databaseClient);
 
-    userTestUtils = new UserTestUtils(sqliteDatabaseClient);
+    userTestUtils = new UserTestUtils(databaseClient);
 
     await userTestUtils.truncate();
   });
@@ -33,7 +33,7 @@ describe('FindUserQueryHandler', () => {
   afterEach(async () => {
     await userTestUtils.truncate();
 
-    await sqliteDatabaseClient.destroy();
+    await databaseClient.destroy();
   });
 
   it('finds a User by id', async () => {

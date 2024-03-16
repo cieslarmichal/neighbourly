@@ -3,9 +3,12 @@
     "username": "ADMIN_USERNAME",
     "password": "ADMIN_PASSWORD"
   },
+  "database": {
+    "user": "DATABASE_USER",
+    "password": "DATABASE_PASSWORD",
+    "host": "DATABASE_HOST"
+  },
   "logLevel": "LOG_LEVEL",
-  "databasePath": "DATABASE_PATH",
-  "queueDatabasePath": "QUEUE_DATABASE_PATH",
   "token": {
     "secret": "TOKEN_SECRET"
   },
