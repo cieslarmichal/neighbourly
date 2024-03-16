@@ -17,8 +17,20 @@ const configSchema = Type.Object({
     password: Type.String({ minLength: 1 }),
   }),
   logLevel: Type.Enum(LogLevel),
-  databasePath: Type.String({ minLength: 1 }),
-  queueDatabasePath: Type.String({ minLength: 1 }),
+  database: Type.Object({
+    databaseName: Type.String({
+      minLength: 1,
+    }),
+    user: Type.String({
+      minLength: 1,
+    }),
+    password: Type.String({
+      minLength: 1,
+    }),
+    host: Type.String({
+      minLength: 1,
+    }),
+  }),
   hashSaltRounds: Type.Number({
     minimum: 5,
     maximum: 15,

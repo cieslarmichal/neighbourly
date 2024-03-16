@@ -24,7 +24,6 @@
     "@fastify/type-provider-typebox": "^4.0.0",
     "@sinclair/typebox": "^0.32.15",
     "bcrypt": "^5.1.1",
-    "better-sqlite3": "^9.4.3",
     "cockatiel": "^3.1.2",
     "config": "^3.3.11",
     "fastify": "^4.26.2",
@@ -34,6 +33,7 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "node-fetch": "3.3.2",
+    "pg": "^8.11.3",
     "pino": "^8.19.0",
     "uuid": "^9.0.1"
   },

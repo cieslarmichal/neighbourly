@@ -1,7 +1,7 @@
 import { testSymbols } from './symbols.js';
 import { Application } from '../../src/core/application.js';
-import { type SqliteDatabaseClient } from '../../src/core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../src/core/symbols.js';
+import { type DatabaseClient } from '../../src/libs/database/clients/databaseClient/databaseClient.js';
 import { type DependencyInjectionContainer } from '../../src/libs/dependencyInjection/dependencyInjectionContainer.js';
 import { GroupTestUtils } from '../../src/modules/groupModule/tests/utils/groupTestUtils/groupTestUtils.js';
 import { UserGroupTestUtils } from '../../src/modules/userGroupModule/tests/utils/userGroupTestUtils/userGroupTestUtils.js';
@@ -17,27 +17,27 @@ export class TestContainer {
 
     container.bind<UserGroupTestUtils>(
       testSymbols.userGroupTestUtils,
-      () => new UserGroupTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
-    );
-
-    container.bind<GroupTestUtils>(
-      testSymbols.groupTestUtils,
-      () => new GroupTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
+      () => new UserGroupTestUtils(container.get<DatabaseClient>(coreSymbols.databaseClient)),
     );
 
     container.bind<UserTestUtils>(
       testSymbols.userTestUtils,
-      () => new UserTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
+      () => new UserTestUtils(container.get<DatabaseClient>(coreSymbols.databaseClient)),
+    );
+
+    container.bind<GroupTestUtils>(
+      testSymbols.groupTestUtils,
+      () => new GroupTestUtils(container.get<DatabaseClient>(coreSymbols.databaseClient)),
     );
 
     container.bind<BlacklistTokenTestUtils>(
       testSymbols.blacklistTokenTestUtils,
-      () => new BlacklistTokenTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
+      () => new BlacklistTokenTestUtils(container.get<DatabaseClient>(coreSymbols.databaseClient)),
     );
 
     container.bind<EmailEventTestUtils>(
       testSymbols.emailEventTestUtils,
-      () => new EmailEventTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.entityEventsDatabaseClient)),
+      () => new EmailEventTestUtils(container.get<DatabaseClient>(coreSymbols.entityEventsDatabaseClient)),
     );
 
     container.overrideBinding<EmailService>(userSymbols.emailService, () => ({

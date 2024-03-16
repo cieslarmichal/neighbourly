@@ -45,8 +45,8 @@ import { UserRepositoryImpl } from './infrastructure/repositories/userRepository
 import { EmailServiceImpl } from './infrastructure/services/emailServiceImpl.js';
 import { symbols } from './symbols.js';
 import { type Config } from '../../core/config.js';
-import { type SqliteDatabaseClient } from '../../core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../core/symbols.js';
+import { type DatabaseClient } from '../../libs/database/clients/databaseClient/databaseClient.js';
 import { type DependencyInjectionContainer } from '../../libs/dependencyInjection/dependencyInjectionContainer.js';
 import { type DependencyInjectionModule } from '../../libs/dependencyInjection/dependencyInjectionModule.js';
 import { type LoggerService } from '../../libs/logger/services/loggerService/loggerService.js';
@@ -64,7 +64,7 @@ export class UserModule implements DependencyInjectionModule {
       symbols.userRepository,
       () =>
         new UserRepositoryImpl(
-          container.get<SqliteDatabaseClient>(coreSymbols.databaseClient),
+          container.get<DatabaseClient>(coreSymbols.databaseClient),
           container.get<UserMapper>(symbols.userMapper),
           container.get<UuidService>(coreSymbols.uuidService),
         ),
@@ -76,7 +76,7 @@ export class UserModule implements DependencyInjectionModule {
       symbols.blacklistTokenRepository,
       () =>
         new BlacklistTokenRepositoryImpl(
-          container.get<SqliteDatabaseClient>(coreSymbols.databaseClient),
+          container.get<DatabaseClient>(coreSymbols.databaseClient),
           container.get<BlacklistTokenMapper>(symbols.blacklistTokenMapper),
           container.get<UuidService>(coreSymbols.uuidService),
         ),
@@ -229,7 +229,7 @@ export class UserModule implements DependencyInjectionModule {
       symbols.emailEventRepository,
       () =>
         new EmailEventRepositoryImpl(
-          container.get<SqliteDatabaseClient>(coreSymbols.entityEventsDatabaseClient),
+          container.get<DatabaseClient>(coreSymbols.entityEventsDatabaseClient),
           container.get<UuidService>(coreSymbols.uuidService),
           container.get<EmailEventMapper>(symbols.emailEventMapper),
         ),

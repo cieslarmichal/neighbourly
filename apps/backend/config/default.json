@@ -7,9 +7,13 @@
     "username": null,
     "password": null
   },
+  "database": {
+    "databaseName": null,
+    "user": null,
+    "password": null,
+    "host": null
+  },
   "logLevel": "debug",
-  "databasePath": null,
-  "queueDatabasePath": null,
   "hashSaltRounds": 10,
   "token": {
     "secret": null,

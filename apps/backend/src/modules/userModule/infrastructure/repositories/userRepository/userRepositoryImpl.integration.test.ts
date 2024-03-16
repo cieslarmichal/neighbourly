@@ -5,8 +5,8 @@ import { Generator } from '@common/tests';
 import { RepositoryError } from '../../../../../common/errors/repositoryError.js';
 import { ResourceNotFoundError } from '../../../../../common/errors/resourceNotFoundError.js';
 import { Application } from '../../../../../core/application.js';
-import { type SqliteDatabaseClient } from '../../../../../core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../../../../core/symbols.js';
+import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
 import { type UserRepository } from '../../../domain/repositories/userRepository/userRepository.js';
 import { symbols } from '../../../symbols.js';
 import { UserTestFactory } from '../../../tests/factories/userTestFactory/userTestFactory.js';
@@ -15,7 +15,7 @@ import { UserTestUtils } from '../../../tests/utils/userTestUtils/userTestUtils.
 describe('UserRepositoryImpl', () => {
   let userRepository: UserRepository;
 
-  let sqliteDatabaseClient: SqliteDatabaseClient;
+  let databaseClient: DatabaseClient;
 
   let userTestUtils: UserTestUtils;
 
@@ -26,9 +26,9 @@ describe('UserRepositoryImpl', () => {
 
     userRepository = container.get<UserRepository>(symbols.userRepository);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
+    databaseClient = container.get<DatabaseClient>(coreSymbols.databaseClient);
 
-    userTestUtils = new UserTestUtils(sqliteDatabaseClient);
+    userTestUtils = new UserTestUtils(databaseClient);
 
     await userTestUtils.truncate();
   });
@@ -36,7 +36,7 @@ describe('UserRepositoryImpl', () => {
   afterEach(async () => {
     await userTestUtils.truncate();
 
-    await sqliteDatabaseClient.destroy();
+    await databaseClient.destroy();
   });
 
   describe('Save', () => {

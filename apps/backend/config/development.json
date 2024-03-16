@@ -3,8 +3,12 @@
     "username": "admin",
     "password": "admin"
   },
-  "databasePath": "data/dev.db",
-  "queueDatabasePath": "data/dev-queue.db",
+  "database": {
+    "databaseName": "neighbourly",
+    "user": "local",
+    "password": "local",
+    "host": "localhost"
+  },
   "token": {
     "secret": "12321313423565365654546654121890008"
   },
