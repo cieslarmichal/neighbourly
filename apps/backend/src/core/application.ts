@@ -17,6 +17,7 @@ import { SendGridServiceFactory } from '../libs/sendGrid/factories/sendGridServi
 import { type SendGridService } from '../libs/sendGrid/services/sendGridService/sendGridService.js';
 import { type UuidService } from '../libs/uuid/services/uuidService/uuidService.js';
 import { UuidServiceImpl } from '../libs/uuid/services/uuidService/uuidServiceImpl.js';
+import { AddressDatabaseManager } from '../modules/addressModule/infrastructure/databases/addressDatabase/addressDatabaseManager.js';
 import { AuthModule } from '../modules/authModule/authModule.js';
 import { GroupModule } from '../modules/groupModule/groupModule.js';
 import { GroupDatabaseManager } from '../modules/groupModule/infrastructure/databases/groupDatabase/groupDatabaseManager.js';
@@ -33,6 +34,7 @@ export class Application {
       GroupDatabaseManager,
       UserEventsDatabaseManager,
       UserGroupDatabaseManager,
+      AddressDatabaseManager,
     ];
 
     for await (const databaseManager of databaseManagers) {
