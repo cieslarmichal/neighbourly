@@ -21,6 +21,7 @@ describe('GroupMapperImpl', () => {
       id: groupEntity.id,
       state: {
         name: groupEntity.name,
+        accessType: groupEntity.accessType,
       },
     });
   });
@@ -33,6 +34,7 @@ describe('GroupMapperImpl', () => {
     expect(groupRawEntity).toEqual({
       id: group.getId(),
       name: group.getName(),
+      accessType: group.getAccessType(),
     });
   });
 });

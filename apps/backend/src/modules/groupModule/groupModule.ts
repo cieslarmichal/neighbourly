@@ -8,8 +8,8 @@ import { type DeleteGroupCommandHandler } from './application/commandHandlers/de
 import { DeleteGroupCommandHandlerImpl } from './application/commandHandlers/deleteGroupCommandHandler/deleteGroupCommandHandlerImpl.js';
 import { type DeletePostCommandHandler } from './application/commandHandlers/deletePostCommandHandler/deletePostCommandHandler.js';
 import { DeletePostCommandHandlerImpl } from './application/commandHandlers/deletePostCommandHandler/deletePostCommandHandlerImpl.js';
-import { type UpdateGroupNameCommandHandler } from './application/commandHandlers/updateGroupNameCommandHandler/updateGroupNameCommandHandler.js';
-import { UpdateGroupNameCommandHandlerImpl } from './application/commandHandlers/updateGroupNameCommandHandler/updateGroupNameCommandHandlerImpl.js';
+import { type UpdateGroupCommandHandler } from './application/commandHandlers/updateGroupCommandHandler/updateGroupCommandHandler.js';
+import { UpdateGroupCommandHandlerImpl } from './application/commandHandlers/updateGroupCommandHandler/updateGroupCommandHandlerImpl.js';
 import { type UpdatePostCommandHandler } from './application/commandHandlers/updatePostCommandHandler/updatePostCommandHandler.js';
 import { UpdatePostCommandHandlerImpl } from './application/commandHandlers/updatePostCommandHandler/updatePostCommandHandlerImpl.js';
 import { type FindGroupByIdQueryHandler } from './application/queryHandlers/findGroupByIdQueryHandler/findGroupByIdQueryHandler.js';
@@ -99,10 +99,10 @@ export class GroupModule implements DependencyInjectionModule {
         ),
     );
 
-    container.bind<UpdateGroupNameCommandHandler>(
-      symbols.updateGroupNameCommandHandler,
+    container.bind<UpdateGroupCommandHandler>(
+      symbols.updateGroupCommandHandler,
       () =>
-        new UpdateGroupNameCommandHandlerImpl(
+        new UpdateGroupCommandHandlerImpl(
           container.get<GroupRepository>(symbols.groupRepository),
           container.get<LoggerService>(coreSymbols.loggerService),
         ),
@@ -175,7 +175,7 @@ export class GroupModule implements DependencyInjectionModule {
       () =>
         new GroupHttpController(
           container.get<CreateGroupCommandHandler>(symbols.createGroupCommandHandler),
-          container.get<UpdateGroupNameCommandHandler>(symbols.updateGroupNameCommandHandler),
+          container.get<UpdateGroupCommandHandler>(symbols.updateGroupCommandHandler),
           container.get<DeleteGroupCommandHandler>(symbols.deleteGroupCommandHandler),
           container.get<FindGroupsQueryHandler>(symbols.findGroupsQueryHandler),
           container.get<FindGroupByNameQueryHandler>(symbols.findGroupByNameQueryHandler),

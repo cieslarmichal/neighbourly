@@ -107,6 +107,10 @@ export class Generator {
     return faker.helpers.arrayElement(['admin', 'user']);
   }
 
+  public static accessType(): string {
+    return faker.helpers.arrayElement(['private', 'public']);
+  }
+
   public static locationNearby(location: { latitude: number; longitude: number; radius?: number }): {
     latitude: number;
     longitude: number;

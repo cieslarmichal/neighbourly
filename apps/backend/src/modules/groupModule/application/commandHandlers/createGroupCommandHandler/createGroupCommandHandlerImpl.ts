@@ -14,7 +14,7 @@ export class CreateGroupCommandHandlerImpl implements CreateGroupCommandHandler 
   ) {}
 
   public async execute(payload: CreateGroupPayload): Promise<CreateGroupResult> {
-    const { name } = payload;
+    const { name, accessType } = payload;
 
     const normalizedName = name.toLowerCase();
 
@@ -37,6 +37,7 @@ export class CreateGroupCommandHandlerImpl implements CreateGroupCommandHandler 
     const group = await this.groupRepository.saveGroup({
       group: {
         name: normalizedName,
+        accessType,
       },
     });
 

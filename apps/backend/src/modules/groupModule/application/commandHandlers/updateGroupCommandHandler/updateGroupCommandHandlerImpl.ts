@@ -1,28 +1,27 @@
 import {
-  type UpdateGroupNameCommandHandler,
-  type UpdateGroupNamePayload,
-  type UpdateGroupNameResult,
-} from './updateGroupNameCommandHandler.js';
+  type UpdateGroupCommandHandler,
+  type UpdateGroupPayload,
+  type UpdateGroupResult,
+} from './updateGroupCommandHandler.js';
 import { OperationNotValidError } from '../../../../../common/errors/operationNotValidError.js';
 import { ResourceNotFoundError } from '../../../../../common/errors/resourceNotFoundError.js';
 import { type LoggerService } from '../../../../../libs/logger/services/loggerService/loggerService.js';
 import { type GroupRepository } from '../../../domain/repositories/groupRepository/groupRepository.js';
 
-export class UpdateGroupNameCommandHandlerImpl implements UpdateGroupNameCommandHandler {
+export class UpdateGroupCommandHandlerImpl implements UpdateGroupCommandHandler {
   public constructor(
     private readonly groupRepository: GroupRepository,
     private readonly loggerService: LoggerService,
   ) {}
 
-  public async execute(payload: UpdateGroupNamePayload): Promise<UpdateGroupNameResult> {
-    const { id, name } = payload;
-
-    const normalizedName = name.toLowerCase();
+  public async execute(payload: UpdateGroupPayload): Promise<UpdateGroupResult> {
+    const { id, name, accessType } = payload;
 
     this.loggerService.debug({
-      message: 'Updating Group name...',
+      message: 'Updating Group...',
       id,
-      name: normalizedName,
+      name,
+      accessType,
     });
 
     const existingGroup = await this.groupRepository.findGroup({ id });
@@ -34,18 +33,26 @@ export class UpdateGroupNameCommandHandlerImpl implements UpdateGroupNameCommand
       });
     }
 
-    const nameTaken = await this.groupRepository.findGroup({
-      name: normalizedName,
-    });
+    if (name) {
+      const normalizedName = name.toLowerCase();
 
-    if (nameTaken) {
-      throw new OperationNotValidError({
-        reason: 'Group with this name already exists.',
-        name,
+      const nameTaken = await this.groupRepository.findGroup({
+        name: normalizedName,
       });
+
+      if (nameTaken) {
+        throw new OperationNotValidError({
+          reason: 'Group with this name already exists.',
+          name,
+        });
+      }
+
+      existingGroup.setName({ name: normalizedName });
     }
 
-    existingGroup.setName({ name: normalizedName });
+    if (accessType) {
+      existingGroup.setAccessType({ accessType });
+    }
 
     const group = await this.groupRepository.saveGroup({
       group: existingGroup,

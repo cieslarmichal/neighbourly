@@ -31,13 +31,13 @@ import {
   searchGroupsQueryParamsDTOSchema,
 } from './schema/searchGroupsSchema.js';
 import {
-  type UpdateGroupNameBodyDTO,
-  type UpdateGroupNameResponseBodyDTO,
-  type UpdateGroupNamePathParamsDTO,
-  updateGroupNameBodyDTOSchema,
-  updateGroupNameResponseBodyDTOSchema,
-  updateGroupNamePathParamsDTOSchema,
-} from './schema/updateGroupNameSchema.js';
+  type UpdateGroupBodyDTO,
+  type UpdateGroupResponseBodyDTO,
+  type UpdateGroupPathParamsDTO,
+  updateGroupBodyDTOSchema,
+  updateGroupResponseBodyDTOSchema,
+  updateGroupPathParamsDTOSchema,
+} from './schema/updateGroupSchema.js';
 import { type HttpController } from '../../../../../common/types/http/httpController.js';
 import { HttpMethodName } from '../../../../../common/types/http/httpMethodName.js';
 import { type HttpRequest } from '../../../../../common/types/http/httpRequest.js';
@@ -52,7 +52,7 @@ import { SecurityMode } from '../../../../../common/types/http/securityMode.js';
 import { type AccessControlService } from '../../../../authModule/application/services/accessControlService/accessControlService.js';
 import { type CreateGroupCommandHandler } from '../../../application/commandHandlers/createGroupCommandHandler/createGroupCommandHandler.js';
 import { type DeleteGroupCommandHandler } from '../../../application/commandHandlers/deleteGroupCommandHandler/deleteGroupCommandHandler.js';
-import { type UpdateGroupNameCommandHandler } from '../../../application/commandHandlers/updateGroupNameCommandHandler/updateGroupNameCommandHandler.js';
+import { type UpdateGroupCommandHandler } from '../../../application/commandHandlers/updateGroupCommandHandler/updateGroupCommandHandler.js';
 import { type FindGroupByIdQueryHandler } from '../../../application/queryHandlers/findGroupByIdQueryHandler/findGroupByIdQueryHandler.js';
 import { type FindGroupByNameQueryHandler } from '../../../application/queryHandlers/findGroupByNameQueryHandler/findGroupByNameQueryHandler.js';
 import { type FindGroupsQueryHandler } from '../../../application/queryHandlers/findGroupsQueryHandler/findGroupsQueryHandler.js';
@@ -65,7 +65,7 @@ export class GroupHttpController implements HttpController {
 
   public constructor(
     private readonly createGroupCommandHandler: CreateGroupCommandHandler,
-    private readonly updateGroupNameCommandHandler: UpdateGroupNameCommandHandler,
+    private readonly updateGroupCommandHandler: UpdateGroupCommandHandler,
     private readonly deleteGroupCommandHandler: DeleteGroupCommandHandler,
     private readonly findGroupsQueryHandler: FindGroupsQueryHandler,
     private readonly findGroupByNameQueryHandler: FindGroupByNameQueryHandler,
@@ -94,18 +94,18 @@ export class GroupHttpController implements HttpController {
         securityMode: SecurityMode.bearerToken,
       }),
       new HttpRoute({
-        description: 'Update Group name.',
-        handler: this.updateGroupName.bind(this),
+        description: 'Update Group.',
+        handler: this.updateGroup.bind(this),
         method: HttpMethodName.patch,
         schema: {
           request: {
-            pathParams: updateGroupNamePathParamsDTOSchema,
-            body: updateGroupNameBodyDTOSchema,
+            pathParams: updateGroupPathParamsDTOSchema,
+            body: updateGroupBodyDTOSchema,
           },
           response: {
             [HttpStatusCode.ok]: {
-              description: 'Group name updated.',
-              schema: updateGroupNameResponseBodyDTOSchema,
+              description: 'Group updated.',
+              schema: updateGroupResponseBodyDTOSchema,
             },
           },
         },
@@ -231,10 +231,11 @@ export class GroupHttpController implements HttpController {
       authorizationHeader: request.headers['authorization'],
     });
 
-    const { name } = request.body;
+    const { name, accessType } = request.body;
 
     const { group } = await this.createGroupCommandHandler.execute({
       name,
+      accessType,
     });
 
     return {
@@ -243,9 +244,9 @@ export class GroupHttpController implements HttpController {
     };
   }
 
-  private async updateGroupName(
-    request: HttpRequest<UpdateGroupNameBodyDTO, null, UpdateGroupNamePathParamsDTO>,
-  ): Promise<HttpOkResponse<UpdateGroupNameResponseBodyDTO>> {
+  private async updateGroup(
+    request: HttpRequest<UpdateGroupBodyDTO, null, UpdateGroupPathParamsDTO>,
+  ): Promise<HttpOkResponse<UpdateGroupResponseBodyDTO>> {
     this.accessControlService.verifyBearerToken({
       authorizationHeader: request.headers['authorization'],
     });
@@ -254,7 +255,7 @@ export class GroupHttpController implements HttpController {
 
     const { name } = request.body;
 
-    const { group } = await this.updateGroupNameCommandHandler.execute({
+    const { group } = await this.updateGroupCommandHandler.execute({
       id,
       name,
     });
@@ -335,6 +336,7 @@ export class GroupHttpController implements HttpController {
     return {
       id: group.getId(),
       name: group.getName(),
+      accessType: group.getAccessType(),
     };
   }
 }

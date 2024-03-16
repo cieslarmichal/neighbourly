@@ -1,3 +1,4 @@
+import { type AccessType } from '@common/contracts';
 import { Generator } from '@common/tests';
 
 import { Group, type GroupState } from '../../../domain/entities/group/group.js';
@@ -8,6 +9,7 @@ export class GroupTestFactory {
     return {
       id: Generator.uuid(),
       name: Generator.word(),
+      accessType: Generator.accessType() as AccessType,
       ...overrides,
     };
   }
@@ -16,6 +18,7 @@ export class GroupTestFactory {
     return new Group({
       id: Generator.uuid(),
       name: Generator.word(),
+      accessType: Generator.accessType() as AccessType,
       ...overrides,
     });
   }

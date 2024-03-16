@@ -11,6 +11,8 @@ export class M1CreateGroupTableMigration implements Migration {
       table.text('id').primary();
 
       table.text('name').unique().notNullable();
+
+      table.text('accessType').notNullable();
     });
   }
 

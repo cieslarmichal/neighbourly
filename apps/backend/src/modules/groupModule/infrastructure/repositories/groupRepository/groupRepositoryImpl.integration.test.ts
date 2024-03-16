@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
+import { type AccessType } from '@common/contracts';
 import { Generator } from '@common/tests';
 
 import { testSymbols } from '../../../../../../tests/container/symbols.js';
@@ -218,9 +219,12 @@ describe('GroupRepositoryImpl', () => {
     it('creates Group', async () => {
       const name = Generator.word();
 
+      const accessType = Generator.accessType() as AccessType;
+
       const group = await groupRepository.saveGroup({
         group: {
           name,
+          accessType,
         },
       });
 
@@ -236,9 +240,12 @@ describe('GroupRepositoryImpl', () => {
     it('throws an error while creating - when Group with the same name already exists', async () => {
       const name = Generator.word();
 
+      const accessType = Generator.accessType() as AccessType;
+
       await groupRepository.saveGroup({
         group: {
           name,
+          accessType,
         },
       });
 
@@ -247,6 +254,7 @@ describe('GroupRepositoryImpl', () => {
           await groupRepository.saveGroup({
             group: {
               name,
+              accessType,
             },
           }),
       ).toThrowErrorInstance({
@@ -263,9 +271,13 @@ describe('GroupRepositoryImpl', () => {
 
       const newName = Generator.words(2);
 
+      const newAccessType = Generator.accessType() as AccessType;
+
       const group = groupTestFactory.create(groupRawEntity);
 
       group.setName({ name: newName });
+
+      group.setAccessType({ accessType: newAccessType });
 
       const upatedGroup = await groupRepository.saveGroup({
         group,
@@ -275,11 +287,15 @@ describe('GroupRepositoryImpl', () => {
 
       expect(upatedGroup.getName()).toBe(newName);
 
+      expect(upatedGroup.getAccessType()).toBe(newAccessType);
+
       const persistedGroup = await groupTestUtils.findById(groupRawEntity.id);
 
       expect(persistedGroup).not.toBeNull();
 
       expect(persistedGroup?.name).toBe(newName);
+
+      expect(persistedGroup?.accessType).toBe(newAccessType);
     });
 
     it('throws an error while updating - when Group with the same name already exists', async () => {
@@ -293,6 +309,7 @@ describe('GroupRepositoryImpl', () => {
             group: new Group({
               id: createdGroup1.id,
               name: createdGroup2.name,
+              accessType: createdGroup1.accessType,
             }),
           }),
       ).toThrowErrorInstance({

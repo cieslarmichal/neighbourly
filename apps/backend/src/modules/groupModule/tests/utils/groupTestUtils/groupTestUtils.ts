@@ -1,3 +1,4 @@
+import { AccessType } from '@common/contracts';
 import { Generator } from '@common/tests';
 
 import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
@@ -22,11 +23,13 @@ export class GroupTestUtils {
       group = {
         id: Generator.uuid(),
         name: input.group.name,
+        accessType: AccessType.public,
       };
     } else {
       group = {
         id: Generator.uuid(),
         name: await this.getNonClashingName(),
+        accessType: AccessType.public,
         ...input?.group,
       };
     }

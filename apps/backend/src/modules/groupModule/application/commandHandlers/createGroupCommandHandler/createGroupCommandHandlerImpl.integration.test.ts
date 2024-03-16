@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
+import { type AccessType } from '@common/contracts';
 import { Generator } from '@common/tests';
 
 import { type CreateGroupCommandHandler } from './createGroupCommandHandler.js';
@@ -35,6 +36,7 @@ describe('CreateGroupCommandHandlerImpl', () => {
       async () =>
         await commandHandler.execute({
           name: group.name,
+          accessType: group.accessType,
         }),
     ).toThrowErrorInstance({
       instance: OperationNotValidError,
@@ -48,8 +50,11 @@ describe('CreateGroupCommandHandlerImpl', () => {
   it('creates Group', async () => {
     const groupName = Generator.words(2);
 
+    const accessType = Generator.accessType() as AccessType;
+
     const { group } = await commandHandler.execute({
       name: groupName,
+      accessType,
     });
 
     expect(group.getName()).toEqual(groupName);

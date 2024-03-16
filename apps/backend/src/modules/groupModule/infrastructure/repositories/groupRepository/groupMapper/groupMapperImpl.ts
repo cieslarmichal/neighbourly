@@ -7,6 +7,7 @@ export class GroupMapperImpl implements GroupMapper {
     return new Group({
       id: raw.id,
       name: raw.name,
+      accessType: raw.accessType,
     });
   }
 
@@ -14,6 +15,7 @@ export class GroupMapperImpl implements GroupMapper {
     return {
       id: domain.getId(),
       name: domain.getName(),
+      accessType: domain.getAccessType(),
     };
   }
 }
