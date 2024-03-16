@@ -1,6 +1,12 @@
 import { Generator } from '@common/tests';
 
-import { Address, type AddressProps } from '../../../domain/entities/address/address.js';
+import { Address } from '../../../domain/entities/address/address.js';
+import { type AddressState } from '../../../domain/entities/address/addressState.js';
+
+interface CreateAddressPayload {
+  id?: string;
+  state?: Partial<AddressState>;
+}
 
 export class AddressTestFactory {
   private constructor() {}
@@ -9,20 +15,20 @@ export class AddressTestFactory {
     return new AddressTestFactory();
   }
 
-  public createAddress(input: Partial<AddressProps>): Address {
+  public createAddress(input: CreateAddressPayload): Address {
     return new Address({
-      id: input.id || Generator.uuid(),
+      id: input?.id || Generator.uuid(),
       state: {
         latitude: Generator.number(-90, 90, 6),
         longitude: Generator.number(-180, 180, 6),
         groupId: null,
         userId: null,
-        ...input.state,
+        ...input?.state,
       },
     });
   }
 
-  public createAddressState(input: Partial<AddressProps['state']>): AddressProps['state'] {
+  public createAddressState(input: Partial<AddressState>): AddressState {
     return {
       latitude: Generator.number(-90, 90, 6),
       longitude: Generator.number(-180, 180, 6),

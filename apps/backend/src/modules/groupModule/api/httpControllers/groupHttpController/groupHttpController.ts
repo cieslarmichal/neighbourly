@@ -25,6 +25,12 @@ import {
 import { findGroupsResponseBodyDTOSchema, type FindGroupsResponseBodyDTO } from './schema/findGroupsSchema.js';
 import { type GroupDTO } from './schema/groupDTO.js';
 import {
+  type SearchGroupsOkResponseBodyDTO,
+  type SearchGroupsQueryParamsDTO,
+  searchGroupsOkResponseBodyDTOSchema,
+  searchGroupsQueryParamsDTOSchema,
+} from './schema/searchGroupsSchema.js';
+import {
   type UpdateGroupNameBodyDTO,
   type UpdateGroupNameResponseBodyDTO,
   type UpdateGroupNamePathParamsDTO,
@@ -50,6 +56,7 @@ import { type UpdateGroupNameCommandHandler } from '../../../application/command
 import { type FindGroupByIdQueryHandler } from '../../../application/queryHandlers/findGroupByIdQueryHandler/findGroupByIdQueryHandler.js';
 import { type FindGroupByNameQueryHandler } from '../../../application/queryHandlers/findGroupByNameQueryHandler/findGroupByNameQueryHandler.js';
 import { type FindGroupsQueryHandler } from '../../../application/queryHandlers/findGroupsQueryHandler/findGroupsQueryHandler.js';
+import { type FindGroupsWithinRadiusQueryHandler } from '../../../application/queryHandlers/findGroupsWithinRadiusQueryHandler/findGroupsWithinRadiusQueryHandler.js';
 import { type Group } from '../../../domain/entities/group/group.js';
 
 export class GroupHttpController implements HttpController {
@@ -63,6 +70,7 @@ export class GroupHttpController implements HttpController {
     private readonly findGroupsQueryHandler: FindGroupsQueryHandler,
     private readonly findGroupByNameQueryHandler: FindGroupByNameQueryHandler,
     private readonly findGroupByIdQueryHandler: FindGroupByIdQueryHandler,
+    private readonly findGroupsWithinRadiusQueryHandler: FindGroupsWithinRadiusQueryHandler,
     private readonly accessControlService: AccessControlService,
   ) {}
 
@@ -137,6 +145,24 @@ export class GroupHttpController implements HttpController {
         securityMode: SecurityMode.bearerToken,
       }),
       new HttpRoute({
+        description: 'Find groups within radius.',
+        method: HttpMethodName.get,
+        handler: this.findGroupsWithinRadius.bind(this),
+        schema: {
+          request: {
+            queryParams: searchGroupsQueryParamsDTOSchema,
+          },
+          response: {
+            [HttpStatusCode.ok]: {
+              description: 'Groups found.',
+              schema: searchGroupsOkResponseBodyDTOSchema,
+            },
+          },
+        },
+        path: '/search',
+        securityMode: SecurityMode.bearerToken,
+      }),
+      new HttpRoute({
         description: 'Find group by name.',
         handler: this.findGroupByName.bind(this),
         method: HttpMethodName.get,
@@ -173,6 +199,29 @@ export class GroupHttpController implements HttpController {
         securityMode: SecurityMode.bearerToken,
       }),
     ];
+  }
+
+  private async findGroupsWithinRadius(
+    request: HttpRequest<null, SearchGroupsQueryParamsDTO>,
+  ): Promise<HttpOkResponse<SearchGroupsOkResponseBodyDTO>> {
+    this.accessControlService.verifyBasicAuth({
+      authorizationHeader: request.headers['authorization'],
+    });
+
+    const { latitude, longitude, radius } = request.queryParams;
+
+    const groups = await this.findGroupsWithinRadiusQueryHandler.execute({
+      latitude,
+      longitude,
+      radius,
+    });
+
+    return {
+      body: {
+        data: groups.map(this.mapGroupToDTO),
+      },
+      statusCode: HttpStatusCode.ok,
+    };
   }
 
   private async createGroup(

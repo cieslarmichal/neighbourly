@@ -40,6 +40,8 @@ export * from './schemas/userGroup/findGroupsByUserId.js';
 
 export * from './schemas/userGroup/findUsersByGroupId.js';
 
+export * from './schemas/group/searchGroup.js';
+
 export * from './schemas/userGroup/updateUserGroup.js';
 
 export * from './schemas/userGroup/deleteUserGroup.js';

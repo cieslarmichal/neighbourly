@@ -1,12 +1,16 @@
 import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
 import { type RawQuery } from '../../../../../libs/database/types/rawQuery.js';
-import { type Address, type AddressProps } from '../../../domain/entities/address/address.js';
+import { type Address } from '../../../domain/entities/address/address.js';
+import { type AddressState } from '../../../domain/entities/address/addressState.js';
 import { addressTable } from '../../../infrastructure/databases/addressDatabase/tables/addressTable/addressTable.js';
 import { type AddressTableRawEntity } from '../../../infrastructure/databases/addressDatabase/tables/addressTable/addressTableRawEntity.js';
 import { AddressTestFactory } from '../../factories/addressTestFactory/addressTestFactory.js';
 
 interface CreateAndPersistsPayload {
-  input: Partial<AddressProps>;
+  input?: {
+    id?: string;
+    state?: Partial<AddressState>;
+  };
 }
 
 export class AddressTestUtils {
@@ -15,7 +19,10 @@ export class AddressTestUtils {
   public constructor(private readonly databaseClient: DatabaseClient) {}
 
   public async createAndPersist(payload: CreateAndPersistsPayload = { input: {} }): Promise<Address> {
-    const address = this.addressTestFactory.createAddress(payload.input);
+    const address = this.addressTestFactory.createAddress({
+      id: payload.input?.id as string,
+      state: payload.input?.state as AddressState,
+    });
 
     await this.databaseClient(addressTable).insert(<AddressTableRawEntity>{
       id: address.getId(),

@@ -18,6 +18,8 @@ import { type FindGroupByNameQueryHandler } from './application/queryHandlers/fi
 import { FindGroupByNameQueryHandlerImpl } from './application/queryHandlers/findGroupByNameQueryHandler/findGroupByNameQueryHandlerImpl.js';
 import { type FindGroupsQueryHandler } from './application/queryHandlers/findGroupsQueryHandler/findGroupsQueryHandler.js';
 import { FindGroupsQueryHandlerImpl } from './application/queryHandlers/findGroupsQueryHandler/findGroupsQueryHandlerImpl.js';
+import { type FindGroupsWithinRadiusQueryHandler } from './application/queryHandlers/findGroupsWithinRadiusQueryHandler/findGroupsWithinRadiusQueryHandler.js';
+import { FindGroupsWithinRadiusQueryHandlerImpl } from './application/queryHandlers/findGroupsWithinRadiusQueryHandler/findGroupsWithinRadiusQueryHandlerImpl.js';
 import { type FindPostsQueryHandler } from './application/queryHandlers/findPostsQueryHandler/findPostsQueryHandler.js';
 import { FindPostsQueryHandlerImpl } from './application/queryHandlers/findPostsQueryHandler/findPostsQueryHandlerImpl.js';
 import { type GroupRepository } from './domain/repositories/groupRepository/groupRepository.js';
@@ -29,6 +31,7 @@ import { type PostMapper } from './infrastructure/repositories/postRepository/po
 import { PostMapperImpl } from './infrastructure/repositories/postRepository/postMapper/postMapperImpl.js';
 import { PostRepositoryImpl } from './infrastructure/repositories/postRepository/postRepositoryImpl.js';
 import { symbols } from './symbols.js';
+import { type Config } from '../../core/config.js';
 import { coreSymbols } from '../../core/symbols.js';
 import { type DatabaseClient } from '../../libs/database/clients/databaseClient/databaseClient.js';
 import { type DependencyInjectionContainer } from '../../libs/dependencyInjection/dependencyInjectionContainer.js';
@@ -155,6 +158,17 @@ export class GroupModule implements DependencyInjectionModule {
       symbols.findPostsQueryHandler,
       () => new FindPostsQueryHandlerImpl(container.get<PostRepository>(symbols.postRepository)),
     );
+
+    const config = container.get<Config>(coreSymbols.config);
+
+    container.bind<FindGroupsWithinRadiusQueryHandler>(
+      symbols.findGroupsWithinRadiusQueryHandler,
+      () =>
+        new FindGroupsWithinRadiusQueryHandlerImpl(
+          container.get<GroupRepository>(symbols.groupRepository),
+          config.radiusLimit,
+        ),
+    );
   }
 
   private bindHttpControllers(container: DependencyInjectionContainer): void {
@@ -168,6 +182,7 @@ export class GroupModule implements DependencyInjectionModule {
           container.get<FindGroupsQueryHandler>(symbols.findGroupsQueryHandler),
           container.get<FindGroupByNameQueryHandler>(symbols.findGroupByNameQueryHandler),
           container.get<FindGroupByIdQueryHandler>(symbols.findGroupByIdQueryHandler),
+          container.get<FindGroupsWithinRadiusQueryHandler>(symbols.findGroupsWithinRadiusQueryHandler),
           container.get<AccessControlService>(authSymbols.accessControlService),
         ),
     );

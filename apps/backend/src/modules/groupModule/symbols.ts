@@ -9,6 +9,7 @@ export const symbols = {
   findGroupsQueryHandler: Symbol('findGroupsQueryHandler'),
   findGroupByNameQueryHandler: Symbol('findGroupByNameQueryHandler'),
   findGroupByIdQueryHandler: Symbol('findGroupByIdQueryHandler'),
+  findGroupsWithinRadiusQueryHandler: Symbol('findGroupsWithinRadiusQueryHandler'),
 
   postMapper: Symbol('postMapper'),
   postRepository: Symbol('postRepository'),
