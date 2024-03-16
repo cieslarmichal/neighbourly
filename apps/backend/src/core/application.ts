@@ -1,10 +1,11 @@
 import { ApplicationHttpController } from './api/httpControllers/applicationHttpController/applicationHttpController.js';
 import { type Config, ConfigFactory } from './config.js';
-import { type SqliteDatabaseClient } from './database/sqliteDatabaseClient/sqliteDatabaseClient.js';
-import { SqliteDatabaseClientFactory } from './database/sqliteDatabaseClient/sqliteDatabaseClientFactory.js';
 import { HttpServer } from './httpServer/httpServer.js';
 import { QueueRouter } from './queueRouter/queueRouter.js';
 import { coreSymbols, symbols } from './symbols.js';
+import { type DatabaseClient } from '../libs/database/clients/databaseClient/databaseClient.js';
+import { DatabaseClientFactory } from '../libs/database/factories/databaseClientFactory/databaseClientFactory.js';
+import { DatabaseClientType } from '../libs/database/types/databaseClientType.js';
 import { type DependencyInjectionContainer } from '../libs/dependencyInjection/dependencyInjectionContainer.js';
 import { DependencyInjectionContainerFactory } from '../libs/dependencyInjection/dependencyInjectionContainerFactory.js';
 import { type DependencyInjectionModule } from '../libs/dependencyInjection/dependencyInjectionModule.js';
@@ -25,25 +26,11 @@ import { UserModule } from '../modules/userModule/userModule.js';
 
 export class Application {
   private static async setupDatabase(container: DependencyInjectionContainer): Promise<void> {
-    const coreDatabaseManagers = [UserDatabaseManager, GroupDatabaseManager];
-
-    const eventsDatabaseManagers = [UserEventsDatabaseManager];
+    const coreDatabaseManagers = [UserDatabaseManager, GroupDatabaseManager, UserEventsDatabaseManager];
 
     for await (const databaseManager of coreDatabaseManagers) {
       await databaseManager.bootstrapDatabase(container);
     }
-
-    for await (const databaseManager of eventsDatabaseManagers) {
-      await databaseManager.bootstrapDatabase(container);
-    }
-
-    const sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
-
-    const entityEventsDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.entityEventsDatabaseClient);
-
-    await sqliteDatabaseClient.raw('PRAGMA journal_mode = WAL');
-
-    await entityEventsDatabaseClient.raw('PRAGMA journal_mode = WAL');
   }
 
   public static createContainer(): DependencyInjectionContainer {
@@ -65,19 +52,31 @@ export class Application {
 
     container.bind<Config>(symbols.config, () => config);
 
-    container.bind<SqliteDatabaseClient>(symbols.databaseClient, () =>
-      SqliteDatabaseClientFactory.create({ databasePath: config.databasePath }),
+    container.bind<DatabaseClient>(symbols.databaseClient, () =>
+      DatabaseClientFactory.create({
+        clientType: DatabaseClientType.postgres,
+        databaseName: 'neighbourly',
+        minPoolConnections: 1,
+        maxPoolConnections: 10,
+        port: 5432,
+        ...config.database,
+      }),
     );
 
-    container.bind<SqliteDatabaseClient>(symbols.entityEventsDatabaseClient, () =>
-      SqliteDatabaseClientFactory.create({
-        databasePath: config.queueDatabasePath,
+    container.bind<DatabaseClient>(symbols.entityEventsDatabaseClient, () =>
+      DatabaseClientFactory.create({
+        clientType: DatabaseClientType.postgres,
+        databaseName: 'neighbourly',
+        minPoolConnections: 1,
+        maxPoolConnections: 10,
+        port: 5432,
+        ...config.database,
       }),
     );
 
     container.bind<ApplicationHttpController>(
       symbols.applicationHttpController,
-      () => new ApplicationHttpController(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
+      () => new ApplicationHttpController(container.get<DatabaseClient>(coreSymbols.databaseClient)),
     );
 
     container.bind<SendGridService>(symbols.sendGridService, () =>

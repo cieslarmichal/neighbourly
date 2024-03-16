@@ -3,7 +3,11 @@
     "username": "admin",
     "password": "admin"
   },
-  "databasePath": "data/dev.db",
+  "database": {
+    "user": "local",
+    "password": "local",
+    "host": "localhost"
+  },
   "queueDatabasePath": "data/dev-queue.db",
   "token": {
     "secret": "12321313423565365654546654121890008"

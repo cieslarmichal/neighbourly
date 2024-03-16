@@ -6,8 +6,8 @@ import { type LogoutUserCommandHandler } from './logoutUserCommandHandler.js';
 import { testSymbols } from '../../../../../../tests/container/symbols.js';
 import { TestContainer } from '../../../../../../tests/container/testContainer.js';
 import { OperationNotValidError } from '../../../../../common/errors/operationNotValidError.js';
-import { type SqliteDatabaseClient } from '../../../../../core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../../../../core/symbols.js';
+import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
 import { type TokenService } from '../../../../authModule/application/services/tokenService/tokenService.js';
 import { authSymbols } from '../../../../authModule/symbols.js';
 import { TokenType } from '../../../domain/types/tokenType.js';
@@ -18,7 +18,7 @@ import { type UserTestUtils } from '../../../tests/utils/userTestUtils/userTestU
 describe('LogoutUserCommandHandlerImpl', () => {
   let commandHandler: LogoutUserCommandHandler;
 
-  let sqliteDatabaseClient: SqliteDatabaseClient;
+  let databaseClient: DatabaseClient;
 
   let tokenService: TokenService;
 
@@ -31,7 +31,7 @@ describe('LogoutUserCommandHandlerImpl', () => {
 
     commandHandler = container.get<LogoutUserCommandHandler>(symbols.logoutUserCommandHandler);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
+    databaseClient = container.get<DatabaseClient>(coreSymbols.databaseClient);
 
     tokenService = container.get<TokenService>(authSymbols.tokenService);
 
@@ -45,7 +45,7 @@ describe('LogoutUserCommandHandlerImpl', () => {
 
     await blacklistTokenTestUtils.truncate();
 
-    await sqliteDatabaseClient.destroy();
+    await databaseClient.destroy();
   });
 
   it('logs user out', async () => {

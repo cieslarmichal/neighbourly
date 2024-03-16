@@ -6,8 +6,8 @@ import { type RegisterUserCommandHandler } from './registerUserCommandHandler.js
 import { OperationNotValidError } from '../../../../../common/errors/operationNotValidError.js';
 import { ResourceAlreadyExistsError } from '../../../../../common/errors/resourceAlreadyExistsError.js';
 import { Application } from '../../../../../core/application.js';
-import { type SqliteDatabaseClient } from '../../../../../core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../../../../core/symbols.js';
+import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
 import { symbols } from '../../../symbols.js';
 import { UserTestFactory } from '../../../tests/factories/userTestFactory/userTestFactory.js';
 import { UserTestUtils } from '../../../tests/utils/userTestUtils/userTestUtils.js';
@@ -18,7 +18,7 @@ describe('RegisterUserCommandHandler', () => {
 
   let registerUserCommandHandler: RegisterUserCommandHandler;
 
-  let sqliteDatabaseClient: SqliteDatabaseClient;
+  let databaseClient: DatabaseClient;
 
   let emailService: EmailService;
 
@@ -31,11 +31,11 @@ describe('RegisterUserCommandHandler', () => {
 
     registerUserCommandHandler = container.get<RegisterUserCommandHandler>(symbols.registerUserCommandHandler);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
+    databaseClient = container.get<DatabaseClient>(coreSymbols.databaseClient);
 
     emailService = container.get<EmailService>(symbols.emailService);
 
-    userTestUtils = new UserTestUtils(sqliteDatabaseClient);
+    userTestUtils = new UserTestUtils(databaseClient);
 
     await userTestUtils.truncate();
   });
@@ -43,7 +43,7 @@ describe('RegisterUserCommandHandler', () => {
   afterEach(async () => {
     await userTestUtils.truncate();
 
-    await sqliteDatabaseClient.destroy();
+    await databaseClient.destroy();
   });
 
   it('creates a User', async () => {

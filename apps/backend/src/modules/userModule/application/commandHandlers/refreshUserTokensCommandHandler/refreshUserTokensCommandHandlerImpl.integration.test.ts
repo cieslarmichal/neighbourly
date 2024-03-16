@@ -7,8 +7,8 @@ import { testSymbols } from '../../../../../../tests/container/symbols.js';
 import { TestContainer } from '../../../../../../tests/container/testContainer.js';
 import { OperationNotValidError } from '../../../../../common/errors/operationNotValidError.js';
 import { type Config } from '../../../../../core/config.js';
-import { type SqliteDatabaseClient } from '../../../../../core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../../../../core/symbols.js';
+import { type DatabaseClient } from '../../../../../libs/database/clients/databaseClient/databaseClient.js';
 import { type TokenService } from '../../../../authModule/application/services/tokenService/tokenService.js';
 import { authSymbols } from '../../../../authModule/symbols.js';
 import { TokenType } from '../../../domain/types/tokenType.js';
@@ -19,7 +19,7 @@ import { type UserTestUtils } from '../../../tests/utils/userTestUtils/userTestU
 describe('RefreshUserTokensCommandHandler', () => {
   let refreshUserTokensCommandHandler: RefreshUserTokensCommandHandler;
 
-  let sqliteDatabaseClient: SqliteDatabaseClient;
+  let databaseClient: DatabaseClient;
 
   let userTestUtils: UserTestUtils;
 
@@ -40,7 +40,7 @@ describe('RefreshUserTokensCommandHandler', () => {
 
     config = container.get<Config>(coreSymbols.config);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
+    databaseClient = container.get<DatabaseClient>(coreSymbols.databaseClient);
 
     userTestUtils = container.get<UserTestUtils>(testSymbols.userTestUtils);
 
@@ -56,7 +56,7 @@ describe('RefreshUserTokensCommandHandler', () => {
 
     await blacklistTokenTestUtils.truncate();
 
-    await sqliteDatabaseClient.destroy();
+    await databaseClient.destroy();
   });
 
   it('returns new access token', async () => {

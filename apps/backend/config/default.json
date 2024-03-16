@@ -7,6 +7,11 @@
     "username": null,
     "password": null
   },
+  "database": {
+    "user": null,
+    "password": null,
+    "host": null
+  },
   "logLevel": "debug",
   "databasePath": null,
   "queueDatabasePath": null,
