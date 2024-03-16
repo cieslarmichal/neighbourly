@@ -38,4 +38,4 @@ jobs:
       - run: npm ci
       - run: npm run build:dev
       - run: npm run test:unit
-      - run: DATABASE_USER=postgres DATABASE_PASSWORD=postgres DATABASE_HOST=postgres npm run test:integration
+      - run: DATABASE_USER=postgres DATABASE_PASSWORD=postgres DATABASE_HOST=localhost npm run test:integration
