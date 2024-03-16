@@ -159,14 +159,12 @@ export class GroupModule implements DependencyInjectionModule {
       () => new FindPostsQueryHandlerImpl(container.get<PostRepository>(symbols.postRepository)),
     );
 
-    const config = container.get<Config>(coreSymbols.config);
-
     container.bind<FindGroupsWithinRadiusQueryHandler>(
       symbols.findGroupsWithinRadiusQueryHandler,
       () =>
         new FindGroupsWithinRadiusQueryHandlerImpl(
           container.get<GroupRepository>(symbols.groupRepository),
-          config.radiusLimit,
+          container.get<Config>(coreSymbols.config).radiusLimit,
         ),
     );
   }
