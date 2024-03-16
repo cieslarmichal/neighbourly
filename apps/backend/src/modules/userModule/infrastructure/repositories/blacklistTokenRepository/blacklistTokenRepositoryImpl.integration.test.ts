@@ -23,7 +23,7 @@ describe('BlacklistTokenRepositoryImpl', () => {
 
     blacklistTokenRepository = container.get<BlacklistTokenRepository>(symbols.blacklistTokenRepository);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     blacklistTokenTestUtils = new BlacklistTokenTestUtils(sqliteDatabaseClient);
 

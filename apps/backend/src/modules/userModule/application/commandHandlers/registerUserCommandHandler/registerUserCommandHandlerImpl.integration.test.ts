@@ -31,7 +31,7 @@ describe('RegisterUserCommandHandler', () => {
 
     registerUserCommandHandler = container.get<RegisterUserCommandHandler>(symbols.registerUserCommandHandler);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     emailService = container.get<EmailService>(symbols.emailService);
 

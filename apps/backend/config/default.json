@@ -28,7 +28,7 @@
   },
   "sendGrid": {
     "apiKey": null,
-    "senderEmail": "michal.andrzej.cielsar@gmail.com"
+    "senderEmail": "michal.andrzej.cieslar@gmail.com"
   },
   "frontendUrl": "https://neighbourly.com"
 }

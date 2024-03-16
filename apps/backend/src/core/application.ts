@@ -23,9 +23,7 @@ import { UserModule } from '../modules/userModule/userModule.js';
 
 export class Application {
   private static async setupDatabase(container: DependencyInjectionContainer): Promise<void> {
-    const coreDatabaseManagers = [
-      UserDatabaseManager,
-    ];
+    const coreDatabaseManagers = [UserDatabaseManager];
 
     const eventsDatabaseManagers = [UserEventsDatabaseManager];
 
@@ -37,7 +35,7 @@ export class Application {
       await databaseManager.bootstrapDatabase(container);
     }
 
-    const sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    const sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     const entityEventsDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.entityEventsDatabaseClient);
 
@@ -47,10 +45,7 @@ export class Application {
   }
 
   public static createContainer(): DependencyInjectionContainer {
-    const modules: DependencyInjectionModule[] = [
-      new UserModule(),
-      new AuthModule(),
-    ];
+    const modules: DependencyInjectionModule[] = [new UserModule(), new AuthModule()];
 
     const container = DependencyInjectionContainerFactory.create({ modules });
 
@@ -80,7 +75,7 @@ export class Application {
 
     container.bind<ApplicationHttpController>(
       symbols.applicationHttpController,
-      () => new ApplicationHttpController(container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient)),
+      () => new ApplicationHttpController(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
     );
 
     container.bind<SendGridService>(symbols.sendGridService, () =>

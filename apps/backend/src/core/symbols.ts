@@ -3,7 +3,7 @@ export const symbols = {
   loggerService: Symbol('loggerService'),
   httpService: Symbol('httpService'),
   uuidService: Symbol('uuidService'),
-  sqliteDatabaseClient: Symbol('sqliteDatabaseClient'),
+  databaseClient: Symbol('databaseClient'),
   applicationHttpController: Symbol('applicationHttpController'),
   sendGridService: Symbol('sendGridService'),
 
@@ -15,7 +15,7 @@ export const coreSymbols = {
   loggerService: symbols.loggerService,
   httpService: symbols.httpService,
   uuidService: symbols.uuidService,
-  sqliteDatabaseClient: symbols.sqliteDatabaseClient,
+  databaseClient: symbols.databaseClient,
   entityEventsDatabaseClient: symbols.entityEventsDatabaseClient,
   sendGridService: symbols.sendGridService,
 };

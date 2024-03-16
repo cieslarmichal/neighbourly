@@ -64,7 +64,7 @@ export class UserModule implements DependencyInjectionModule {
       symbols.userRepository,
       () =>
         new UserRepositoryImpl(
-          container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient),
+          container.get<SqliteDatabaseClient>(coreSymbols.databaseClient),
           container.get<UserMapper>(symbols.userMapper),
           container.get<UuidService>(coreSymbols.uuidService),
         ),
@@ -76,7 +76,7 @@ export class UserModule implements DependencyInjectionModule {
       symbols.blacklistTokenRepository,
       () =>
         new BlacklistTokenRepositoryImpl(
-          container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient),
+          container.get<SqliteDatabaseClient>(coreSymbols.databaseClient),
           container.get<BlacklistTokenMapper>(symbols.blacklistTokenMapper),
           container.get<UuidService>(coreSymbols.uuidService),
         ),

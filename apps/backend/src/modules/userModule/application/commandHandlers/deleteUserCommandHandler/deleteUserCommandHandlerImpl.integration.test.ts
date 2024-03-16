@@ -23,7 +23,7 @@ describe('DeleteUserCommandHandler', () => {
 
     deleteUserCommandHandler = container.get<DeleteUserCommandHandler>(symbols.deleteUserCommandHandler);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     userTestUtils = new UserTestUtils(sqliteDatabaseClient);
 
