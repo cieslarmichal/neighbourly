@@ -26,7 +26,7 @@ describe('UserRepositoryImpl', () => {
 
     userRepository = container.get<UserRepository>(symbols.userRepository);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     userTestUtils = new UserTestUtils(sqliteDatabaseClient);
 

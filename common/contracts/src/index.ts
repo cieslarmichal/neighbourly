@@ -19,3 +19,15 @@ export * from './schemas/user/resetUserPassword.js';
 export * from './schemas/user/sendVerificationEmail.js';
 
 export * from './schemas/user/changeUserPassword.js';
+
+export * from './schemas/group/createGroup.js';
+
+export * from './schemas/group/findGroups.js';
+
+export * from './schemas/group/findGroupById.js';
+
+export * from './schemas/group/findGroupByName.js';
+
+export * from './schemas/group/updateGroupName.js';
+
+export * from './schemas/group/deleteGroup.js';

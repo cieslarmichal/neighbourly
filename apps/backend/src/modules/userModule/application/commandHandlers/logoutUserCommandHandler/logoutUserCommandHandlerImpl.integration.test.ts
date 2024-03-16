@@ -31,7 +31,7 @@ describe('LogoutUserCommandHandlerImpl', () => {
 
     commandHandler = container.get<LogoutUserCommandHandler>(symbols.logoutUserCommandHandler);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     tokenService = container.get<TokenService>(authSymbols.tokenService);
 

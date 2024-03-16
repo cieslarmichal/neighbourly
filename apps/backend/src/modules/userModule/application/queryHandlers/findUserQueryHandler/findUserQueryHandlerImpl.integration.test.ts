@@ -23,7 +23,7 @@ describe('FindUserQueryHandler', () => {
 
     findUserQueryHandler = container.get<FindUserQueryHandler>(symbols.findUserQueryHandler);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     userTestUtils = new UserTestUtils(sqliteDatabaseClient);
 

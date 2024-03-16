@@ -5,7 +5,7 @@ import { type DependencyInjectionContainer } from '../../../../../libs/dependenc
 
 export class UserDatabaseManager {
   public static async bootstrapDatabase(container: DependencyInjectionContainer): Promise<void> {
-    const databaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    const databaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     const migrationSource = new UserDatabaseMigrationSource();
 
@@ -16,7 +16,7 @@ export class UserDatabaseManager {
   }
 
   public static async teardownDatabase(container: DependencyInjectionContainer): Promise<void> {
-    const databaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    const databaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     const migrationSource = new UserDatabaseMigrationSource();
 

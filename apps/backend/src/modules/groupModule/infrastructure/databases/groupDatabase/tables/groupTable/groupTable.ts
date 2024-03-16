@@ -1,0 +1,1 @@
+export const groupTable = 'groups';

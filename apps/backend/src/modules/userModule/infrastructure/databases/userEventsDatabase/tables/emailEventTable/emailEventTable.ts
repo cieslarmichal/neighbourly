@@ -1,3 +1,1 @@
-export class EmailEventTable {
-  public readonly name = 'emailEvents';
-}
+export const emailEventTable = 'emailEvents';

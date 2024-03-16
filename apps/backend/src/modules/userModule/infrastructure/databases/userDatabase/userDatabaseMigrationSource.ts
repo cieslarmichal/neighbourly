@@ -1,16 +1,11 @@
 import { M1CreateUserTableMigration } from './migrations/m1CreateUserTableMigration.js';
 import { M2CreateBlacklistTokenTableMigration } from './migrations/m2CreateBlacklistTokenTableMigration.js';
-import { M3CreateAddressesTableMigration } from './migrations/m3CreateAddressesTableMigration.js';
 import { type Migration } from '../../../../../libs/database/types/migration.js';
 import { type MigrationSource } from '../../../../../libs/database/types/migrationSource.js';
 
 export class UserDatabaseMigrationSource implements MigrationSource {
   public async getMigrations(): Promise<Migration[]> {
-    return [
-      new M1CreateUserTableMigration(),
-      new M2CreateBlacklistTokenTableMigration(),
-      new M3CreateAddressesTableMigration(),
-    ];
+    return [new M1CreateUserTableMigration(), new M2CreateBlacklistTokenTableMigration()];
   }
 
   public getMigrationName(migration: Migration): string {

@@ -3,6 +3,7 @@ import { Application } from '../../src/core/application.js';
 import { type SqliteDatabaseClient } from '../../src/core/database/sqliteDatabaseClient/sqliteDatabaseClient.js';
 import { coreSymbols } from '../../src/core/symbols.js';
 import { type DependencyInjectionContainer } from '../../src/libs/dependencyInjection/dependencyInjectionContainer.js';
+import { GroupTestUtils } from '../../src/modules/groupModule/tests/utils/groupTestUtils/groupTestUtils.js';
 import { type EmailService } from '../../src/modules/userModule/application/services/emailService/emailService.js';
 import { symbols as userSymbols } from '../../src/modules/userModule/symbols.js';
 import { BlacklistTokenTestUtils } from '../../src/modules/userModule/tests/utils/blacklistTokenTestUtils/blacklistTokenTestUtils.js';
@@ -13,15 +14,19 @@ export class TestContainer {
   public static create(): DependencyInjectionContainer {
     const container = Application.createContainer();
 
+    container.bind<GroupTestUtils>(
+      testSymbols.groupTestUtils,
+      () => new GroupTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
+    );
 
     container.bind<UserTestUtils>(
       testSymbols.userTestUtils,
-      () => new UserTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient)),
+      () => new UserTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
     );
 
     container.bind<BlacklistTokenTestUtils>(
       testSymbols.blacklistTokenTestUtils,
-      () => new BlacklistTokenTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient)),
+      () => new BlacklistTokenTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
     );
 
     container.bind<EmailEventTestUtils>(

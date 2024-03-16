@@ -16,7 +16,7 @@ export class UserEventsDatabaseManager {
   }
 
   public static async teardownDatabase(container: DependencyInjectionContainer): Promise<void> {
-    const databaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    const databaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     const migrationSource = new EventsDatabaseMigrationSource();
 

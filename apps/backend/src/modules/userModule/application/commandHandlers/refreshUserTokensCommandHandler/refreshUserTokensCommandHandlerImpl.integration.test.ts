@@ -40,7 +40,7 @@ describe('RefreshUserTokensCommandHandler', () => {
 
     config = container.get<Config>(coreSymbols.config);
 
-    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.sqliteDatabaseClient);
+    sqliteDatabaseClient = container.get<SqliteDatabaseClient>(coreSymbols.databaseClient);
 
     userTestUtils = container.get<UserTestUtils>(testSymbols.userTestUtils);
 
