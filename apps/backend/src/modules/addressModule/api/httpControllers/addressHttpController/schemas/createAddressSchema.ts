@@ -24,6 +24,9 @@ export const createAddressBodyDTOSchema = Type.Object({
       format: 'uuid',
     }),
   ),
+  street: Type.String(),
+  city: Type.String(),
+  postalCode: Type.String(),
 });
 
 export type CreateAddressBodyDTO = TypeExtends<Static<typeof createAddressBodyDTOSchema>, contracts.CreateAddressBody>;

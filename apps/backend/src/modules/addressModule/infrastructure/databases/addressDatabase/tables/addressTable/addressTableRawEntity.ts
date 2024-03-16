@@ -3,6 +3,9 @@ export interface AddressTableRawEntity {
   userId: string | null;
   groupId: string | null;
   point: string;
+  street: string;
+  city: string;
+  postalCode: string;
 }
 
 export interface AddressTableRawTransformedEntity {
@@ -11,4 +14,7 @@ export interface AddressTableRawTransformedEntity {
   groupId: string | null;
   latitude: number;
   longitude: number;
+  street: string;
+  city: string;
+  postalCode: string;
 }

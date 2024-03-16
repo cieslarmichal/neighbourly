@@ -63,6 +63,9 @@ describe('AddressRepositoryImpl', () => {
         latitude: addressState.latitude,
         longitude: addressState.longitude,
         userId: addressState.userId,
+        city: addressState.city,
+        postalCode: addressState.postalCode,
+        street: addressState.street,
       });
 
       expect(address.getLatitude()).toBe(addressState.latitude);

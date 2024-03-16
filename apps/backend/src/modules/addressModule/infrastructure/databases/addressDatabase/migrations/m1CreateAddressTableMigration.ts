@@ -10,6 +10,9 @@ export class M1CreateAddressTableMigration implements Migration {
             "id" text PRIMARY KEY,
             "groupId" text,
             "userId" text,
+            "street" text NOT NULL,
+            "city" text NOT NULL,
+            "postalCode" text NOT NULL,
             "point" GEOMETRY(POINT, 4326) NOT NULL
         )
     `);

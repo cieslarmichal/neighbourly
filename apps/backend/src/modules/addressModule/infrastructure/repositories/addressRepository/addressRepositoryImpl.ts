@@ -46,7 +46,7 @@ export class AddressRepositoryImpl implements AddressRepository {
   }
 
   public async create(payload: CreatePayload): Promise<Address> {
-    const { groupId, latitude, longitude, userId } = payload;
+    const { groupId, latitude, longitude, userId, city, postalCode, street } = payload;
 
     let rawEntity: AddressTableRawTransformedEntity;
 
@@ -59,6 +59,9 @@ export class AddressRepositoryImpl implements AddressRepository {
             longitude,
           ]),
           ...(groupId ? { groupId } : { userId }),
+          city,
+          postalCode,
+          street,
         })
         .returning('*');
 
@@ -146,6 +149,9 @@ export class AddressRepositoryImpl implements AddressRepository {
       'id',
       'groupId',
       'userId',
+      'street',
+      'city',
+      'postalCode',
       this.databaseClient.raw('ST_X(point) as latitude'),
       this.databaseClient.raw('ST_Y(point) as longitude'),
     ];

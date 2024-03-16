@@ -36,4 +36,16 @@ export class Address {
   public getLongitude(): number {
     return this.state.longitude;
   }
+
+  public getStreet(): string {
+    return this.state.street;
+  }
+
+  public getCity(): string {
+    return this.state.city;
+  }
+
+  public getPostalCode(): string {
+    return this.state.postalCode;
+  }
 }

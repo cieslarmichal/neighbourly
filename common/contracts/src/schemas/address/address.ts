@@ -4,4 +4,7 @@ export interface Address {
   longitude: number;
   groupId?: string;
   userId?: string;
+  street: string;
+  city: string;
+  postalCode: string;
 }

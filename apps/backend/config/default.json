@@ -34,5 +34,6 @@
     "apiKey": null,
     "senderEmail": "michal.andrzej.cieslar@gmail.com"
   },
-  "frontendUrl": "https://neighbourly.com"
+  "frontendUrl": "https://neighbourly.com",
+  "radiusLimit": 5000
 }

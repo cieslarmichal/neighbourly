@@ -26,6 +26,9 @@ export const addressDTOSchema = Type.Object({
       format: 'uuid',
     }),
   ),
+  street: Type.String(),
+  city: Type.String(),
+  postalCode: Type.String(),
 });
 
 export type AddressDTO = TypeExtends<Static<typeof addressDTOSchema>, contracts.Address>;

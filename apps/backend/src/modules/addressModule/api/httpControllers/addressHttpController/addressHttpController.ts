@@ -3,13 +3,13 @@ import {
   createAddressBodyDTOSchema,
   createAddressCreatedResponseDTOSchema,
   type CreateAddressBodyDTO,
-} from './schemas/createAddress.js';
+} from './schemas/createAddressSchema.js';
 import {
   type FindAddressOkResponseBodyDTO,
   findAddressOkResponseBodyDTOSchema,
   findAddressPathParamsDTOSchema,
   type FindAddressPathParamsDTO,
-} from './schemas/findAddress.js';
+} from './schemas/findAddressSchema.js';
 import {
   type UpdateAddressOkResponseBodyDTO,
   updateAddressBodyDTOSchema,
@@ -17,7 +17,7 @@ import {
   updateAddressPathParamsDTOSchema,
   type UpdateAddressBodyDTO,
   type UpdateAddressPathParamsDTO,
-} from './schemas/updateAddress.js';
+} from './schemas/updateAddressSchema.js';
 import { type HttpController } from '../../../../../common/types/http/httpController.js';
 import { HttpMethodName } from '../../../../../common/types/http/httpMethodName.js';
 import { type HttpRequest } from '../../../../../common/types/http/httpRequest.js';
@@ -108,13 +108,16 @@ export class AddressHttpController implements HttpController {
       authorizationHeader: request.headers['authorization'],
     });
 
-    const { latitude, longitude, groupId, userId } = request.body;
+    const { latitude, longitude, groupId, userId, city, postalCode, street } = request.body;
 
     const createdAddress = await this.createAddressCommandHandler.execute({
       groupId,
       latitude,
       longitude,
       userId,
+      city,
+      postalCode,
+      street,
     });
 
     return {
@@ -187,6 +190,9 @@ export class AddressHttpController implements HttpController {
       longitude: address.getLongitude(),
       groupId: address.getGroupId() as string,
       userId: address.getUserId() as string,
+      city: address.getCity(),
+      postalCode: address.getPostalCode(),
+      street: address.getStreet(),
     };
   }
 }

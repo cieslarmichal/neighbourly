@@ -3,4 +3,7 @@ export interface AddressState {
   groupId: string | null;
   latitude: number;
   longitude: number;
+  street: string;
+  city: string;
+  postalCode: string;
 }

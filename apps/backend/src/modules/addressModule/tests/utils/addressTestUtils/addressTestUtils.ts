@@ -32,6 +32,9 @@ export class AddressTestUtils {
       ]) as unknown as string,
       groupId: address.getGroupId(),
       userId: address.getUserId(),
+      city: address.getCity(),
+      postalCode: address.getPostalCode(),
+      street: address.getStreet(),
     });
 
     return this.addressTestFactory.createAddress({
@@ -41,6 +44,9 @@ export class AddressTestUtils {
         longitude: address.getLongitude(),
         groupId: address.getGroupId(),
         userId: address.getUserId(),
+        city: address.getCity(),
+        postalCode: address.getPostalCode(),
+        street: address.getStreet(),
       },
     });
   }
@@ -59,6 +65,9 @@ export class AddressTestUtils {
         longitude: result.longitude,
         groupId: result.groupId,
         userId: result.userId,
+        city: result.city,
+        postalCode: result.postalCode,
+        street: result.street,
       },
     });
   }
@@ -76,6 +85,9 @@ export class AddressTestUtils {
       'id',
       'groupId',
       'userId',
+      'street',
+      'city',
+      'postalCode',
       this.databaseClient.raw('ST_X(point) as latitude'),
       this.databaseClient.raw('ST_Y(point) as longitude'),
     ];

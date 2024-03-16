@@ -6,6 +6,9 @@ export interface CreateAddressCommandHandlerPayload {
   latitude: number;
   userId?: string | undefined;
   groupId?: string | undefined;
+  street: string;
+  city: string;
+  postalCode: string;
 }
 
 export type CreateAddressCommandHandler = CommandHandler<CreateAddressCommandHandlerPayload, Address>;

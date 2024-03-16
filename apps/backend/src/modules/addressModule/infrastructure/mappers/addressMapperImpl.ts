@@ -11,6 +11,9 @@ export class AddressMapperImpl implements AddressMapper {
         longitude: raw.longitude,
         userId: raw.userId ?? null,
         groupId: raw.groupId ?? null,
+        city: raw.city,
+        postalCode: raw.postalCode,
+        street: raw.street,
       },
     });
   }

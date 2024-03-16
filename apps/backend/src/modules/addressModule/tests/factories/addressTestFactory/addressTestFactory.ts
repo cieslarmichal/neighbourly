@@ -23,6 +23,9 @@ export class AddressTestFactory {
         longitude: Generator.number(-180, 180, 6),
         groupId: null,
         userId: null,
+        city: Generator.alphaString(10),
+        postalCode: Generator.alphaString(10),
+        street: Generator.alphaString(10),
         ...input?.state,
       },
     });
@@ -34,6 +37,9 @@ export class AddressTestFactory {
       longitude: Generator.number(-180, 180, 6),
       groupId: null,
       userId: null,
+      city: Generator.alphaString(10),
+      postalCode: Generator.alphaString(10),
+      street: Generator.alphaString(10),
       ...input,
     };
   }

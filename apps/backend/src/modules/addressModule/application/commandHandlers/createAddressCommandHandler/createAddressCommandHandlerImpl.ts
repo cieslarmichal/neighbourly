@@ -20,7 +20,7 @@ export class CreateAddressCommandHandlerImpl implements CreateAddressCommandHand
   ) {}
 
   public async execute(payload: CreateAddressCommandHandlerPayload): Promise<Address> {
-    const { groupId, userId, latitude, longitude } = payload;
+    const { groupId, userId, latitude, longitude, city, postalCode, street } = payload;
 
     if (!groupId && !userId) {
       throw new OperationNotValidError({
@@ -31,6 +31,9 @@ export class CreateAddressCommandHandlerImpl implements CreateAddressCommandHand
     const createPayload: Partial<CreatePayload> = {
       latitude,
       longitude,
+      city,
+      postalCode,
+      street,
     };
 
     if (groupId) {

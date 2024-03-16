@@ -48,6 +48,9 @@ describe('UpdateAddressCommandHandlerImpl', () => {
           userId: undefined,
           latitude: Generator.number(1, 90),
           longitude: Generator.number(1, 90),
+          city: Generator.alphaString(10),
+          postalCode: Generator.alphaString(10),
+          street: Generator.alphaString(10),
         }),
     ).toThrowErrorInstance({
       instance: OperationNotValidError,
@@ -69,6 +72,9 @@ describe('UpdateAddressCommandHandlerImpl', () => {
       userId: user.id,
       latitude,
       longitude,
+      city: Generator.alphaString(10),
+      postalCode: Generator.alphaString(10),
+      street: Generator.alphaString(10),
     });
 
     expect(foundAddress.getUserId()).toEqual(user.id);
@@ -88,6 +94,9 @@ describe('UpdateAddressCommandHandlerImpl', () => {
           userId: nonExistentUserId,
           latitude: Generator.number(1, 90),
           longitude: Generator.number(1, 90),
+          city: Generator.alphaString(10),
+          postalCode: Generator.alphaString(10),
+          street: Generator.alphaString(10),
         }),
     ).toThrowErrorInstance({
       instance: ResourceNotFoundError,
@@ -108,6 +117,9 @@ describe('UpdateAddressCommandHandlerImpl', () => {
           userId: undefined,
           latitude: Generator.number(1, 90),
           longitude: Generator.number(1, 90),
+          city: Generator.alphaString(10),
+          postalCode: Generator.alphaString(10),
+          street: Generator.alphaString(10),
         }),
     ).toThrowErrorInstance({
       instance: ResourceNotFoundError,
