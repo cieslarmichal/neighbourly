@@ -8,6 +8,7 @@
     "password": null
   },
   "database": {
+    "databaseName": null,
     "user": null,
     "password": null,
     "host": null

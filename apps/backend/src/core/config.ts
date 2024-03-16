@@ -18,6 +18,9 @@ const configSchema = Type.Object({
   }),
   logLevel: Type.Enum(LogLevel),
   database: Type.Object({
+    databaseName: Type.String({
+      minLength: 1,
+    }),
     user: Type.String({
       minLength: 1,
     }),

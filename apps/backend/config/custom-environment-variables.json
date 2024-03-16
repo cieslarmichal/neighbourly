@@ -4,6 +4,7 @@
     "password": "ADMIN_PASSWORD"
   },
   "database": {
+    "databaseName": "DATABASE_NAME",
     "user": "DATABASE_USER",
     "password": "DATABASE_PASSWORD",
     "host": "DATABASE_HOST"
