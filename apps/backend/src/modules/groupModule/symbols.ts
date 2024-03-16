@@ -4,7 +4,7 @@ export const symbols = {
 
   createGroupCommandHandler: Symbol('createGroupCommandHandler'),
   deleteGroupCommandHandler: Symbol('deleteGroupCommandHandler'),
-  updateGroupNameCommandHandler: Symbol('updateGroupNameCommandHandler'),
+  updateGroupCommandHandler: Symbol('updateGroupCommandHandler'),
 
   findGroupsQueryHandler: Symbol('findGroupsQueryHandler'),
   findGroupByNameQueryHandler: Symbol('findGroupByNameQueryHandler'),

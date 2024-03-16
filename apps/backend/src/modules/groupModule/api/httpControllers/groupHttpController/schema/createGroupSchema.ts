@@ -1,6 +1,6 @@
 import { type Static, Type } from '@sinclair/typebox';
 
-import type * as contracts from '@common/contracts';
+import * as contracts from '@common/contracts';
 
 import { groupDTO } from './groupDTO.js';
 import { type TypeExtends } from '../../../../../../common/types/schemaExtends.js';
@@ -10,6 +10,7 @@ export const createGroupBodyDTOSchema = Type.Object({
     minLength: 1,
     maxLength: 64,
   }),
+  accessType: Type.Enum(contracts.AccessType),
 });
 
 export type CreateGroupBodyDTO = TypeExtends<contracts.CreateGroupRequestBody, Static<typeof createGroupBodyDTOSchema>>;

@@ -28,9 +28,11 @@ export * from './schemas/group/findGroupById.js';
 
 export * from './schemas/group/findGroupByName.js';
 
-export * from './schemas/group/updateGroupName.js';
+export * from './schemas/group/updateGroup.js';
 
 export * from './schemas/group/deleteGroup.js';
+
+export * from './schemas/group/accessType.js';
 
 export * from './schemas/userGroup/userGroupRole.js';
 

@@ -104,7 +104,7 @@ export class GroupRepositoryImpl implements GroupRepository {
 
     try {
       rawEntities = await this.databaseClient<GroupRawEntity>(groupTable)
-        .select('groups.id', 'groups.name')
+        .select('groups.id', 'groups.name', 'groups.accessType')
         .join('addresses', (join) => {
           join
             .on('groups.id', '=', 'addresses.groupId')
