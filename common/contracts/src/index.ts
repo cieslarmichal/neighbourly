@@ -31,3 +31,15 @@ export * from './schemas/group/findGroupByName.js';
 export * from './schemas/group/updateGroupName.js';
 
 export * from './schemas/group/deleteGroup.js';
+
+export * from './schemas/userGroup/userGroupRole.js';
+
+export * from './schemas/userGroup/createUserGroup.js';
+
+export * from './schemas/userGroup/findGroupsByUserId.js';
+
+export * from './schemas/userGroup/findUsersByGroupId.js';
+
+export * from './schemas/userGroup/updateUserGroup.js';
+
+export * from './schemas/userGroup/deleteUserGroup.js';

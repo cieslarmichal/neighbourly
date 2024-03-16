@@ -19,13 +19,15 @@ import { UuidServiceImpl } from '../libs/uuid/services/uuidService/uuidServiceIm
 import { AuthModule } from '../modules/authModule/authModule.js';
 import { GroupModule } from '../modules/groupModule/groupModule.js';
 import { GroupDatabaseManager } from '../modules/groupModule/infrastructure/databases/groupDatabase/groupDatabaseManager.js';
+import { UserGroupDatabaseManager } from '../modules/userGroupModule/infrastructure/databases/userGroupDatabase/userGroupDatabaseManager.js';
+import { UserGroupModule } from '../modules/userGroupModule/userGroupModule.js';
 import { UserDatabaseManager } from '../modules/userModule/infrastructure/databases/userDatabase/userDatabaseManager.js';
 import { UserEventsDatabaseManager } from '../modules/userModule/infrastructure/databases/userEventsDatabase/userEventsDatabaseManager.js';
 import { UserModule } from '../modules/userModule/userModule.js';
 
 export class Application {
   private static async setupDatabase(container: DependencyInjectionContainer): Promise<void> {
-    const coreDatabaseManagers = [UserDatabaseManager, GroupDatabaseManager];
+    const coreDatabaseManagers = [UserDatabaseManager, GroupDatabaseManager, UserGroupDatabaseManager];
 
     const eventsDatabaseManagers = [UserEventsDatabaseManager];
 
@@ -47,7 +49,12 @@ export class Application {
   }
 
   public static createContainer(): DependencyInjectionContainer {
-    const modules: DependencyInjectionModule[] = [new UserModule(), new AuthModule(), new GroupModule()];
+    const modules: DependencyInjectionModule[] = [
+      new UserModule(),
+      new AuthModule(),
+      new GroupModule(),
+      new UserGroupModule(),
+    ];
 
     const container = DependencyInjectionContainerFactory.create({ modules });
 

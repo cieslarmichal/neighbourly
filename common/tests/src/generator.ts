@@ -103,50 +103,7 @@ export class Generator {
     return faker.date.past();
   }
 
-  public static country(): string {
-    return faker.location.country();
-  }
-
-  public static city(): string {
-    return faker.location.city();
-  }
-
-  public static street(): string {
-    return faker.location.street();
-  }
-
-  public static streetAddress(): string {
-    return faker.location.streetAddress();
-  }
-
-  public static buildingNumber(): string {
-    return faker.location.buildingNumber();
-  }
-
-  public static zipCode(): string {
-    return faker.location.zipCode();
-  }
-
-  public static imageUrl(width = 640, height = 480): string {
-    return faker.image.url({
-      width,
-      height,
-    });
-  }
-
-  public static isbn(): string {
-    return faker.commerce.isbn({ variant: 13 });
-  }
-
-  public static language(): string {
-    return faker.helpers.arrayElement(['english', 'polish', 'german', 'french']);
-  }
-
-  public static bookFormat(): string {
-    return faker.helpers.arrayElement(['paperback', 'hardcover', 'ebook']);
-  }
-
-  public static bookReadingStatus(): string {
-    return faker.helpers.arrayElement(['toRead', 'readingInProgress', 'finishedReading']);
+  public static userGroupRole(): string {
+    return faker.helpers.arrayElement(['admin', 'user']);
   }
 }

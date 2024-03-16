@@ -4,6 +4,7 @@ import { type SqliteDatabaseClient } from '../../src/core/database/sqliteDatabas
 import { coreSymbols } from '../../src/core/symbols.js';
 import { type DependencyInjectionContainer } from '../../src/libs/dependencyInjection/dependencyInjectionContainer.js';
 import { GroupTestUtils } from '../../src/modules/groupModule/tests/utils/groupTestUtils/groupTestUtils.js';
+import { UserGroupTestUtils } from '../../src/modules/userGroupModule/tests/utils/userGroupTestUtils/userGroupTestUtils.js';
 import { type EmailService } from '../../src/modules/userModule/application/services/emailService/emailService.js';
 import { symbols as userSymbols } from '../../src/modules/userModule/symbols.js';
 import { BlacklistTokenTestUtils } from '../../src/modules/userModule/tests/utils/blacklistTokenTestUtils/blacklistTokenTestUtils.js';
@@ -13,6 +14,11 @@ import { UserTestUtils } from '../../src/modules/userModule/tests/utils/userTest
 export class TestContainer {
   public static create(): DependencyInjectionContainer {
     const container = Application.createContainer();
+
+    container.bind<UserGroupTestUtils>(
+      testSymbols.userGroupTestUtils,
+      () => new UserGroupTestUtils(container.get<SqliteDatabaseClient>(coreSymbols.databaseClient)),
+    );
 
     container.bind<GroupTestUtils>(
       testSymbols.groupTestUtils,
