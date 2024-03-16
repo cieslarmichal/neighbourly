@@ -1,4 +1,5 @@
 import { Application } from '../src/core/application.js';
+import { AddressDatabaseManager } from '../src/modules/addressModule/infrastructure/databases/addressDatabase/addressDatabaseManager.js';
 import { GroupDatabaseManager } from '../src/modules/groupModule/infrastructure/databases/groupDatabase/groupDatabaseManager.js';
 import { UserGroupDatabaseManager } from '../src/modules/userGroupModule/infrastructure/databases/userGroupDatabase/userGroupDatabaseManager.js';
 import { UserDatabaseManager } from '../src/modules/userModule/infrastructure/databases/userDatabase/userDatabaseManager.js';
@@ -10,7 +11,12 @@ export async function setup(): Promise<void> {
 
     const eventsDatabaseManagers = [UserEventsDatabaseManager];
 
-    const databaseManagers = [UserDatabaseManager, GroupDatabaseManager, UserGroupDatabaseManager];
+    const databaseManagers = [
+      UserDatabaseManager,
+      GroupDatabaseManager,
+      UserGroupDatabaseManager,
+      AddressDatabaseManager,
+    ];
 
     for (const databaseManager of databaseManagers) {
       await databaseManager.bootstrapDatabase(container);
