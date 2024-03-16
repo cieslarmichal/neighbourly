@@ -1,6 +1,6 @@
 import { type AddressState } from './addressState.js';
 
-interface AddressProps {
+export interface AddressProps {
   id: string;
   state: AddressState;
 }

@@ -1,1 +1,1 @@
-export const addressTableName = 'addresses';
+export const addressTable = 'addresses';

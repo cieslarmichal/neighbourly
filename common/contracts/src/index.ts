@@ -53,3 +53,11 @@ export * from './schemas/post/findPosts.js';
 export * from './schemas/post/updatePost.js';
 
 export * from './schemas/post/deletePost.js';
+
+export * from './schemas/address/address.js';
+
+export * from './schemas/address/findAddress.js';
+
+export * from './schemas/address/updateAddress.js';
+
+export * from './schemas/address/createAddress.js';

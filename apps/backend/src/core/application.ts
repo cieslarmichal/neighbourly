@@ -17,6 +17,7 @@ import { SendGridServiceFactory } from '../libs/sendGrid/factories/sendGridServi
 import { type SendGridService } from '../libs/sendGrid/services/sendGridService/sendGridService.js';
 import { type UuidService } from '../libs/uuid/services/uuidService/uuidService.js';
 import { UuidServiceImpl } from '../libs/uuid/services/uuidService/uuidServiceImpl.js';
+import { AddressModule } from '../modules/addressModule/addressModule.js';
 import { AddressDatabaseManager } from '../modules/addressModule/infrastructure/databases/addressDatabase/addressDatabaseManager.js';
 import { AuthModule } from '../modules/authModule/authModule.js';
 import { GroupModule } from '../modules/groupModule/groupModule.js';
@@ -48,6 +49,7 @@ export class Application {
       new AuthModule(),
       new GroupModule(),
       new UserGroupModule(),
+      new AddressModule(),
     ];
 
     const container = DependencyInjectionContainerFactory.create({ modules });

@@ -15,6 +15,8 @@ import { HttpStatusCode } from '../../common/types/http/httpStatusCode.js';
 import { SecurityMode } from '../../common/types/http/securityMode.js';
 import { type DependencyInjectionContainer } from '../../libs/dependencyInjection/dependencyInjectionContainer.js';
 import { type LoggerService } from '../../libs/logger/services/loggerService/loggerService.js';
+import { type AddressHttpController } from '../../modules/addressModule/api/httpControllers/addressHttpController/addressHttpController.js';
+import { addressSymbols } from '../../modules/addressModule/symbols.js';
 import { type GroupHttpController } from '../../modules/groupModule/api/httpControllers/groupHttpController/groupHttpController.js';
 import { type PostHttpController } from '../../modules/groupModule/api/httpControllers/postHttpController/postHttpController.js';
 import { groupSymbols } from '../../modules/groupModule/symbols.js';
@@ -52,6 +54,7 @@ export class HttpServer {
       this.container.get<ApplicationHttpController>(symbols.applicationHttpController),
       this.container.get<GroupHttpController>(groupSymbols.groupHttpController),
       this.container.get<UserGroupHttpController>(userGroupSymbols.userGroupHttpController),
+      this.container.get<AddressHttpController>(addressSymbols.addressHttpController),
       this.container.get<PostHttpController>(groupSymbols.postHttpController),
     ];
   }

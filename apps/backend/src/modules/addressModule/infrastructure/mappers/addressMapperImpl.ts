@@ -1,5 +1,5 @@
 import { Address } from '../../domain/entities/address/address.js';
-import { type AddressMapper } from '../../domain/mapper/addressMapper.js';
+import { type AddressMapper } from '../../domain/mappers/addressMapper.js';
 import { type AddressTableRawTransformedEntity } from '../databases/addressDatabase/tables/addressTable/addressTableRawEntity.js';
 
 export class AddressMapperImpl implements AddressMapper {
@@ -7,7 +7,6 @@ export class AddressMapperImpl implements AddressMapper {
     return new Address({
       id: raw.id,
       state: {
-        id: raw.id,
         latitude: raw.latitude,
         longitude: raw.longitude,
         userId: raw.userId ?? null,

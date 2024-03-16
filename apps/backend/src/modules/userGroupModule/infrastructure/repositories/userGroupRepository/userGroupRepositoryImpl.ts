@@ -191,7 +191,7 @@ export class UserGroupRepositoryImpl implements UserGroupRepository {
 
     try {
       rawEntities = await this.databaseClient<GroupRawEntity>(userGroupTable)
-        .select([`${groupTable}.id as id`, `${groupTable}.name as name`, `${groupTable}.addressId as addressId`])
+        .select([`${groupTable}.id as id`, `${groupTable}.name as name`])
         .leftJoin(groupTable, (join) => {
           join.on(`${groupTable}.id`, '=', `${userGroupTable}.groupId`);
         })
