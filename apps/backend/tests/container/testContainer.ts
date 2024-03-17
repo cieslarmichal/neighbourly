@@ -5,6 +5,7 @@ import { type DatabaseClient } from '../../src/libs/database/clients/databaseCli
 import { type DependencyInjectionContainer } from '../../src/libs/dependencyInjection/dependencyInjectionContainer.js';
 import { AddressTestUtils } from '../../src/modules/addressModule/tests/utils/addressTestUtils/addressTestUtils.js';
 import { CommentTestUtils } from '../../src/modules/groupModule/tests/utils/commentTestUtils/commentTestUtils.js';
+import { GroupAccessRequestTestUtils } from '../../src/modules/groupModule/tests/utils/groupAccessRequestTestUtils/groupAccessRequestTestUtils.js';
 import { GroupTestUtils } from '../../src/modules/groupModule/tests/utils/groupTestUtils/groupTestUtils.js';
 import { PostTestUtils } from '../../src/modules/groupModule/tests/utils/postTestUtils/postTestUtils.js';
 import { UserGroupTestUtils } from '../../src/modules/userGroupModule/tests/utils/userGroupTestUtils/userGroupTestUtils.js';
@@ -17,6 +18,11 @@ import { UserTestUtils } from '../../src/modules/userModule/tests/utils/userTest
 export class TestContainer {
   public static create(): DependencyInjectionContainer {
     const container = Application.createContainer();
+
+    container.bind<GroupAccessRequestTestUtils>(
+      testSymbols.groupAccessRequestTestUtils,
+      () => new GroupAccessRequestTestUtils(container.get<DatabaseClient>(coreSymbols.databaseClient)),
+    );
 
     container.bind<CommentTestUtils>(
       testSymbols.commentTestUtils,

@@ -1,3 +1,3 @@
 export interface DeleteGroupPathParams {
-  readonly id: string;
+  readonly groupId: string;
 }

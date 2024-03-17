@@ -24,6 +24,12 @@ export const symbols = {
   deleteCommentCommandHandler: Symbol('deleteCommentCommandHandler'),
   updateCommentCommandHandler: Symbol('updateCommentCommandHandler'),
   findCommentsQueryHandler: Symbol('findCommentsQueryHandler'),
+
+  groupAccessRequestMapper: Symbol('groupAccessRequestMapper'),
+  groupAccessRequestRepository: Symbol('groupAccessRequestRepository'),
+  requestGroupAccessCommandHandler: Symbol('requestGroupAccessCommandHandler'),
+  approveGroupAccessRequestCommandHandler: Symbol('approveGroupAccessRequestCommandHandler'),
+  findGroupAccessRequestsQueryHandler: Symbol('findGroupAccessRequestsQueryHandler'),
 };
 
 export const groupSymbols = {

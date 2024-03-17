@@ -1,4 +1,10 @@
 import {
+  type ApproveGroupAccessRequestResponseBodyDTO,
+  approveGroupAccessRequestResponseBodyDTOSchema,
+  approveGroupAccessRequestPathParamsDTOSchema,
+  type ApproveGroupAccessRequestPathParamsDTO,
+} from './schema/approveGroupAccessRequestSchema.js';
+import {
   type CreateGroupBodyDTO,
   type CreateGroupResponseBodyDTO,
   createGroupBodyDTOSchema,
@@ -10,6 +16,12 @@ import {
   deleteGroupPathParamsDTOSchema,
   type DeleteGroupResponseBodyDTO,
 } from './schema/deleteGroupSchema.js';
+import {
+  findGroupAccessRequestsPathParamsDTOSchema,
+  type FindGroupAccessRequestsPathParamsDTO,
+  type FindGroupAccessRequestsResponseBodyDTO,
+  findGroupAccessRequestsResponseBodyDTOSchema,
+} from './schema/findGroupAccessRequestsSchema.js';
 import {
   findGroupByIdPathParamsDTOSchema,
   findGroupByIdResponseBodyDTOSchema,
@@ -23,7 +35,14 @@ import {
   type FindGroupByNameResponseBodyDTO,
 } from './schema/findGroupByNameSchema.js';
 import { findGroupsResponseBodyDTOSchema, type FindGroupsResponseBodyDTO } from './schema/findGroupsSchema.js';
+import { type GroupAccessRequestDTO } from './schema/groupAccessRequestDTO.js';
 import { type GroupDTO } from './schema/groupDTO.js';
+import {
+  requestGroupAccessPathParamsDTOSchema,
+  type RequestGroupAccessPathParamsDTO,
+  type RequestGroupAccessResponseBodyDTO,
+  requestGroupAccessResponseBodyDTOSchema,
+} from './schema/requestGroupAccessSchema.js';
 import {
   type SearchGroupsOkResponseBodyDTO,
   type SearchGroupsQueryParamsDTO,
@@ -50,14 +69,18 @@ import { HttpRoute } from '../../../../../common/types/http/httpRoute.js';
 import { HttpStatusCode } from '../../../../../common/types/http/httpStatusCode.js';
 import { SecurityMode } from '../../../../../common/types/http/securityMode.js';
 import { type AccessControlService } from '../../../../authModule/application/services/accessControlService/accessControlService.js';
+import { type ApproveGroupAccessRequestCommandHandler } from '../../../application/commandHandlers/approveGroupAccessRequestCommandHandler/approveGroupAccessRequestCommandHandler.js';
 import { type CreateGroupCommandHandler } from '../../../application/commandHandlers/createGroupCommandHandler/createGroupCommandHandler.js';
 import { type DeleteGroupCommandHandler } from '../../../application/commandHandlers/deleteGroupCommandHandler/deleteGroupCommandHandler.js';
+import { type RequestGroupAccessCommandHandler } from '../../../application/commandHandlers/requestGroupAccessCommandHandler/requestGroupAccessRequestCommandHandler.js';
 import { type UpdateGroupCommandHandler } from '../../../application/commandHandlers/updateGroupCommandHandler/updateGroupCommandHandler.js';
+import { type FindGroupAccessRequestsQueryHandler } from '../../../application/queryHandlers/findGroupAccessRequestsQueryHandler/findGroupAccessRequestsQueryHandler.js';
 import { type FindGroupByIdQueryHandler } from '../../../application/queryHandlers/findGroupByIdQueryHandler/findGroupByIdQueryHandler.js';
 import { type FindGroupByNameQueryHandler } from '../../../application/queryHandlers/findGroupByNameQueryHandler/findGroupByNameQueryHandler.js';
 import { type FindGroupsQueryHandler } from '../../../application/queryHandlers/findGroupsQueryHandler/findGroupsQueryHandler.js';
 import { type FindGroupsWithinRadiusQueryHandler } from '../../../application/queryHandlers/findGroupsWithinRadiusQueryHandler/findGroupsWithinRadiusQueryHandler.js';
 import { type Group } from '../../../domain/entities/group/group.js';
+import { type GroupAccessRequest } from '../../../domain/entities/groupAccessRequest/groupAccessRequest.js';
 
 export class GroupHttpController implements HttpController {
   public basePath = '/api/groups';
@@ -71,6 +94,9 @@ export class GroupHttpController implements HttpController {
     private readonly findGroupByNameQueryHandler: FindGroupByNameQueryHandler,
     private readonly findGroupByIdQueryHandler: FindGroupByIdQueryHandler,
     private readonly findGroupsWithinRadiusQueryHandler: FindGroupsWithinRadiusQueryHandler,
+    private readonly requestGroupAccessCommandHandler: RequestGroupAccessCommandHandler,
+    private readonly approveGroupAccessRequestCommandHandler: ApproveGroupAccessRequestCommandHandler,
+    private readonly findGroupAccessRequestsQueryHandler: FindGroupAccessRequestsQueryHandler,
     private readonly accessControlService: AccessControlService,
   ) {}
 
@@ -110,7 +136,7 @@ export class GroupHttpController implements HttpController {
           },
         },
         securityMode: SecurityMode.bearerToken,
-        path: ':id/name',
+        path: ':groupId',
       }),
       new HttpRoute({
         description: 'Delete group.',
@@ -127,7 +153,7 @@ export class GroupHttpController implements HttpController {
             },
           },
         },
-        path: ':id',
+        path: ':groupId',
       }),
       new HttpRoute({
         description: 'Find groups.',
@@ -195,7 +221,61 @@ export class GroupHttpController implements HttpController {
             },
           },
         },
-        path: ':id',
+        path: ':groupId',
+        securityMode: SecurityMode.bearerToken,
+      }),
+      new HttpRoute({
+        description: 'Request group access.',
+        handler: this.requestGroupAccess.bind(this),
+        method: HttpMethodName.post,
+        path: ':groupId/access-requests',
+        schema: {
+          request: {
+            pathParams: requestGroupAccessPathParamsDTOSchema,
+          },
+          response: {
+            [HttpStatusCode.ok]: {
+              description: 'Group access requested.',
+              schema: requestGroupAccessResponseBodyDTOSchema,
+            },
+          },
+        },
+        securityMode: SecurityMode.bearerToken,
+      }),
+      new HttpRoute({
+        description: 'Approve group access request.',
+        handler: this.approveGroupAccessRequest.bind(this),
+        method: HttpMethodName.post,
+        path: ':groupId/access-requests/:requestId/approve',
+        schema: {
+          request: {
+            pathParams: approveGroupAccessRequestPathParamsDTOSchema,
+          },
+          response: {
+            [HttpStatusCode.noContent]: {
+              description: 'Group access request approved.',
+              schema: approveGroupAccessRequestResponseBodyDTOSchema,
+            },
+          },
+        },
+        securityMode: SecurityMode.bearerToken,
+      }),
+      new HttpRoute({
+        description: 'Find group access requests.',
+        handler: this.findGroupAccessRequests.bind(this),
+        method: HttpMethodName.get,
+        path: ':groupId/access-requests',
+        schema: {
+          request: {
+            pathParams: findGroupAccessRequestsPathParamsDTOSchema,
+          },
+          response: {
+            [HttpStatusCode.ok]: {
+              description: 'Group access requests found.',
+              schema: findGroupAccessRequestsResponseBodyDTOSchema,
+            },
+          },
+        },
         securityMode: SecurityMode.bearerToken,
       }),
     ];
@@ -251,12 +331,12 @@ export class GroupHttpController implements HttpController {
       authorizationHeader: request.headers['authorization'],
     });
 
-    const { id } = request.pathParams;
+    const { groupId } = request.pathParams;
 
     const { name } = request.body;
 
     const { group } = await this.updateGroupCommandHandler.execute({
-      id,
+      id: groupId,
       name,
     });
 
@@ -273,9 +353,9 @@ export class GroupHttpController implements HttpController {
       authorizationHeader: request.headers['authorization'],
     });
 
-    const { id } = request.pathParams;
+    const { groupId } = request.pathParams;
 
-    await this.deleteGroupCommandHandler.execute({ id });
+    await this.deleteGroupCommandHandler.execute({ id: groupId });
 
     return {
       statusCode: HttpStatusCode.noContent,
@@ -322,9 +402,9 @@ export class GroupHttpController implements HttpController {
       authorizationHeader: request.headers['authorization'],
     });
 
-    const { id } = request.pathParams;
+    const { groupId } = request.pathParams;
 
-    const { group } = await this.findGroupByIdQueryHandler.execute({ id });
+    const { group } = await this.findGroupByIdQueryHandler.execute({ id: groupId });
 
     return {
       body: this.mapGroupToDTO(group),
@@ -337,6 +417,72 @@ export class GroupHttpController implements HttpController {
       id: group.getId(),
       name: group.getName(),
       accessType: group.getAccessType(),
+    };
+  }
+
+  private async requestGroupAccess(
+    request: HttpRequest<undefined, undefined, RequestGroupAccessPathParamsDTO>,
+  ): Promise<HttpOkResponse<RequestGroupAccessResponseBodyDTO>> {
+    const { userId } = await this.accessControlService.verifyBearerToken({
+      authorizationHeader: request.headers['authorization'],
+    });
+
+    const { groupId } = request.pathParams;
+
+    const { groupAccessRequest } = await this.requestGroupAccessCommandHandler.execute({
+      userId,
+      groupId,
+    });
+
+    return {
+      body: this.mapGroupAccessRequestToDTO(groupAccessRequest),
+      statusCode: HttpStatusCode.ok,
+    };
+  }
+
+  private async approveGroupAccessRequest(
+    request: HttpRequest<null, null, ApproveGroupAccessRequestPathParamsDTO>,
+  ): Promise<HttpNoContentResponse<ApproveGroupAccessRequestResponseBodyDTO>> {
+    this.accessControlService.verifyBearerToken({
+      authorizationHeader: request.headers['authorization'],
+    });
+
+    const { requestId } = request.pathParams;
+
+    await this.approveGroupAccessRequestCommandHandler.execute({ requestId });
+
+    return {
+      statusCode: HttpStatusCode.noContent,
+      body: null,
+    };
+  }
+
+  // TODO: check if user is admin of this group
+  private async findGroupAccessRequests(
+    request: HttpRequest<undefined, undefined, FindGroupAccessRequestsPathParamsDTO>,
+  ): Promise<HttpOkResponse<FindGroupAccessRequestsResponseBodyDTO>> {
+    await this.accessControlService.verifyBearerToken({
+      authorizationHeader: request.headers['authorization'],
+    });
+
+    const { groupId } = request.pathParams;
+
+    const { groupAccessRequests } = await this.findGroupAccessRequestsQueryHandler.execute({ groupId });
+
+    return {
+      body: {
+        data: groupAccessRequests.map(this.mapGroupAccessRequestToDTO),
+      },
+      statusCode: HttpStatusCode.ok,
+    };
+  }
+
+  private mapGroupAccessRequestToDTO(post: GroupAccessRequest): GroupAccessRequestDTO {
+    return {
+      id: post.getId(),
+      groupId: post.getGroupId(),
+      userId: post.getUserId(),
+      createdAt: post.getCreatedAt().toISOString(),
     };
   }
 }
