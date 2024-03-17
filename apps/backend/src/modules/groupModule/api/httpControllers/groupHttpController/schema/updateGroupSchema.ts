@@ -6,7 +6,7 @@ import { groupDTO } from './groupDTO.js';
 import { type TypeExtends } from '../../../../../../common/types/schemaExtends.js';
 
 export const updateGroupPathParamsDTOSchema = Type.Object({
-  id: Type.String({ format: 'uuid' }),
+  groupId: Type.String({ format: 'uuid' }),
 });
 
 export type UpdateGroupPathParamsDTO = TypeExtends<

@@ -73,3 +73,9 @@ export * from './schemas/comment/findComments.js';
 export * from './schemas/comment/updateComment.js';
 
 export * from './schemas/comment/deleteComment.js';
+
+export * from './schemas/groupAccess/approveGroupAccessRequest.js';
+
+export * from './schemas/groupAccess/requestGroupAccess.js';
+
+export * from './schemas/groupAccess/findGroupAccessRequests.js';

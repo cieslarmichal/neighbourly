@@ -14,16 +14,16 @@ import {
   type CreatePostPathParamsDTO,
 } from './schema/createPostSchema.js';
 import {
-  type DeletePostPathParamsDTO,
-  type DeletePostResponseBodyDTO,
-  deletePostPathParamsDTOSchema,
-  deletePostResponseBodyDTOSchema,
-} from './schema/deleteCommentSchema.js';
-import {
-  type DeleteCommentPathParamsDTO,
-  type DeleteCommentResponseBodyDTO,
   deleteCommentPathParamsDTOSchema,
   deleteCommentResponseBodyDTOSchema,
+  type DeleteCommentPathParamsDTO,
+  type DeleteCommentResponseBodyDTO,
+} from './schema/deleteCommentSchema.js';
+import {
+  deletePostPathParamsDTOSchema,
+  deletePostResponseBodyDTOSchema,
+  type DeletePostPathParamsDTO,
+  type DeletePostResponseBodyDTO,
 } from './schema/deletePostSchema.js';
 import {
   findCommentsResponseBodyDTOSchema,

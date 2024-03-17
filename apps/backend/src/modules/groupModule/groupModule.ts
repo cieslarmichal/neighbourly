@@ -1,5 +1,7 @@
 import { GroupHttpController } from './api/httpControllers/groupHttpController/groupHttpController.js';
 import { PostHttpController } from './api/httpControllers/postHttpController/postHttpController.js';
+import { type ApproveGroupAccessRequestCommandHandler } from './application/commandHandlers/approveGroupAccessRequestCommandHandler/approveGroupAccessRequestCommandHandler.js';
+import { ApproveGroupAccessRequestCommandHandlerImpl } from './application/commandHandlers/approveGroupAccessRequestCommandHandler/approveGroupAccessRequestCommandHandlerImpl.js';
 import { type CreateCommentCommandHandler } from './application/commandHandlers/createCommentCommandHandler/createCommentCommandHandler.js';
 import { CreateCommentCommandHandlerImpl } from './application/commandHandlers/createCommentCommandHandler/createCommentCommandHandlerImpl.js';
 import { type CreateGroupCommandHandler } from './application/commandHandlers/createGroupCommandHandler/createGroupCommandHandler.js';
@@ -12,6 +14,8 @@ import { type DeleteGroupCommandHandler } from './application/commandHandlers/de
 import { DeleteGroupCommandHandlerImpl } from './application/commandHandlers/deleteGroupCommandHandler/deleteGroupCommandHandlerImpl.js';
 import { type DeletePostCommandHandler } from './application/commandHandlers/deletePostCommandHandler/deletePostCommandHandler.js';
 import { DeletePostCommandHandlerImpl } from './application/commandHandlers/deletePostCommandHandler/deletePostCommandHandlerImpl.js';
+import { type RequestGroupAccessCommandHandler } from './application/commandHandlers/requestGroupAccessCommandHandler/requestGroupAccessRequestCommandHandler.js';
+import { RequestGroupAccessCommandHandlerImpl } from './application/commandHandlers/requestGroupAccessCommandHandler/requestGroupAccessRequestCommandHandlerImpl.js';
 import { type UpdateCommentCommandHandler } from './application/commandHandlers/updateCommentCommandHandler/updateCommentCommandHandler.js';
 import { UpdateCommentCommandHandlerImpl } from './application/commandHandlers/updateCommentCommandHandler/updateCommentCommandHandlerImpl.js';
 import { type UpdateGroupCommandHandler } from './application/commandHandlers/updateGroupCommandHandler/updateGroupCommandHandler.js';
@@ -20,6 +24,8 @@ import { type UpdatePostCommandHandler } from './application/commandHandlers/upd
 import { UpdatePostCommandHandlerImpl } from './application/commandHandlers/updatePostCommandHandler/updatePostCommandHandlerImpl.js';
 import { type FindCommentsQueryHandler } from './application/queryHandlers/findCommentsQueryHandler/findCommentsQueryHandler.js';
 import { FindCommentsQueryHandlerImpl } from './application/queryHandlers/findCommentsQueryHandler/findCommentsQueryHandlerImpl.js';
+import { type FindGroupAccessRequestsQueryHandler } from './application/queryHandlers/findGroupAccessRequestsQueryHandler/findGroupAccessRequestsQueryHandler.js';
+import { FindGroupAccessRequestsQueryHandlerImpl } from './application/queryHandlers/findGroupAccessRequestsQueryHandler/findGroupAccessRequestsQueryHandlerImpl.js';
 import { type FindGroupByIdQueryHandler } from './application/queryHandlers/findGroupByIdQueryHandler/findGroupByIdQueryHandler.js';
 import { FindGroupByIdQueryHandlerImpl } from './application/queryHandlers/findGroupByIdQueryHandler/findGroupByIdQueryHandlerImpl.js';
 import { type FindGroupByNameQueryHandler } from './application/queryHandlers/findGroupByNameQueryHandler/findGroupByNameQueryHandler.js';
@@ -31,11 +37,15 @@ import { FindGroupsWithinRadiusQueryHandlerImpl } from './application/queryHandl
 import { type FindPostsQueryHandler } from './application/queryHandlers/findPostsQueryHandler/findPostsQueryHandler.js';
 import { FindPostsQueryHandlerImpl } from './application/queryHandlers/findPostsQueryHandler/findPostsQueryHandlerImpl.js';
 import { type CommentRepository } from './domain/repositories/commentRepository/commentRepository.js';
+import { type GroupAccessRequestRepository } from './domain/repositories/groupAccessRequestRepository/groupAccessRequestRepository.js';
 import { type GroupRepository } from './domain/repositories/groupRepository/groupRepository.js';
 import { type PostRepository } from './domain/repositories/postRepository/postRepository.js';
 import { type CommentMapper } from './infrastructure/repositories/commentRepository/commentMapper/commentMapper.js';
 import { CommentMapperImpl } from './infrastructure/repositories/commentRepository/commentMapper/commentMapperImpl.js';
 import { CommentRepositoryImpl } from './infrastructure/repositories/commentRepository/commentRepositoryImpl.js';
+import { type GroupAccessRequestMapper } from './infrastructure/repositories/groupAccessRequestRepository/groupAccessRequestMapper/groupAccessRequestMapper.js';
+import { GroupAccessRequestMapperImpl } from './infrastructure/repositories/groupAccessRequestRepository/groupAccessRequestMapper/groupAccessRequestMapperImpl.js';
+import { GroupAccessRequestRepositoryImpl } from './infrastructure/repositories/groupAccessRequestRepository/groupAccessRequestRepositoryImpl.js';
 import { type GroupMapper } from './infrastructure/repositories/groupRepository/groupMapper/groupMapper.js';
 import { GroupMapperImpl } from './infrastructure/repositories/groupRepository/groupMapper/groupMapperImpl.js';
 import { GroupRepositoryImpl } from './infrastructure/repositories/groupRepository/groupRepositoryImpl.js';
@@ -52,6 +62,8 @@ import { type LoggerService } from '../../libs/logger/services/loggerService/log
 import { type UuidService } from '../../libs/uuid/services/uuidService/uuidService.js';
 import { type AccessControlService } from '../authModule/application/services/accessControlService/accessControlService.js';
 import { authSymbols } from '../authModule/symbols.js';
+import { type UserGroupRepository } from '../userGroupModule/domain/repositories/userGroupRepository/userGroupRepository.js';
+import { userGroupSymbols } from '../userGroupModule/symbols.js';
 import { type UserRepository } from '../userModule/domain/repositories/userRepository/userRepository.js';
 import { userSymbols } from '../userModule/symbols.js';
 
@@ -74,6 +86,11 @@ export class GroupModule implements DependencyInjectionModule {
     container.bind<PostMapper>(symbols.postMapper, () => new PostMapperImpl());
 
     container.bind<CommentMapper>(symbols.commentMapper, () => new CommentMapperImpl());
+
+    container.bind<GroupAccessRequestMapper>(
+      symbols.groupAccessRequestMapper,
+      () => new GroupAccessRequestMapperImpl(),
+    );
   }
 
   private bindRepositories(container: DependencyInjectionContainer): void {
@@ -103,6 +120,16 @@ export class GroupModule implements DependencyInjectionModule {
         new CommentRepositoryImpl(
           container.get<DatabaseClient>(coreSymbols.databaseClient),
           container.get<CommentMapper>(symbols.commentMapper),
+          container.get<UuidService>(coreSymbols.uuidService),
+        ),
+    );
+
+    container.bind<GroupAccessRequestRepository>(
+      symbols.groupAccessRequestRepository,
+      () =>
+        new GroupAccessRequestRepositoryImpl(
+          container.get<DatabaseClient>(coreSymbols.databaseClient),
+          container.get<GroupAccessRequestMapper>(symbols.groupAccessRequestMapper),
           container.get<UuidService>(coreSymbols.uuidService),
         ),
     );
@@ -161,6 +188,27 @@ export class GroupModule implements DependencyInjectionModule {
       () =>
         new UpdatePostCommandHandlerImpl(
           container.get<PostRepository>(symbols.postRepository),
+          container.get<LoggerService>(coreSymbols.loggerService),
+        ),
+    );
+
+    container.bind<RequestGroupAccessCommandHandler>(
+      symbols.requestGroupAccessCommandHandler,
+      () =>
+        new RequestGroupAccessCommandHandlerImpl(
+          container.get<GroupAccessRequestRepository>(symbols.groupAccessRequestRepository),
+          container.get<UserRepository>(userSymbols.userRepository),
+          container.get<GroupRepository>(symbols.groupRepository),
+          container.get<LoggerService>(coreSymbols.loggerService),
+        ),
+    );
+
+    container.bind<ApproveGroupAccessRequestCommandHandler>(
+      symbols.approveGroupAccessRequestCommandHandler,
+      () =>
+        new ApproveGroupAccessRequestCommandHandlerImpl(
+          container.get<GroupAccessRequestRepository>(symbols.groupAccessRequestRepository),
+          container.get<UserGroupRepository>(userGroupSymbols.userGroupRepository),
           container.get<LoggerService>(coreSymbols.loggerService),
         ),
     );
@@ -229,6 +277,14 @@ export class GroupModule implements DependencyInjectionModule {
           container.get<Config>(coreSymbols.config).radiusLimit,
         ),
     );
+
+    container.bind<FindGroupAccessRequestsQueryHandler>(
+      symbols.findGroupAccessRequestsQueryHandler,
+      () =>
+        new FindGroupAccessRequestsQueryHandlerImpl(
+          container.get<GroupAccessRequestRepository>(symbols.groupAccessRequestRepository),
+        ),
+    );
   }
 
   private bindHttpControllers(container: DependencyInjectionContainer): void {
@@ -243,6 +299,9 @@ export class GroupModule implements DependencyInjectionModule {
           container.get<FindGroupByNameQueryHandler>(symbols.findGroupByNameQueryHandler),
           container.get<FindGroupByIdQueryHandler>(symbols.findGroupByIdQueryHandler),
           container.get<FindGroupsWithinRadiusQueryHandler>(symbols.findGroupsWithinRadiusQueryHandler),
+          container.get<RequestGroupAccessCommandHandler>(symbols.requestGroupAccessCommandHandler),
+          container.get<ApproveGroupAccessRequestCommandHandler>(symbols.approveGroupAccessRequestCommandHandler),
+          container.get<FindGroupAccessRequestsQueryHandler>(symbols.findGroupAccessRequestsQueryHandler),
           container.get<AccessControlService>(authSymbols.accessControlService),
         ),
     );

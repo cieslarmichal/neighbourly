@@ -1,4 +1,5 @@
 export const testSymbols = {
+  groupAccessRequestTestUtils: Symbol('groupAccessRequestTestUtils'),
   commentTestUtils: Symbol('commentTestUtils'),
   postTestUtils: Symbol('postTestUtils'),
   userGroupTestUtils: Symbol('userGroupTestUtils'),

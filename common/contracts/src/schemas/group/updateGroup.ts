@@ -2,7 +2,7 @@ import { type AccessType } from './accessType.js';
 import { type Group } from './group.js';
 
 export interface UpdateGroupPathParams {
-  readonly id: string;
+  readonly groupId: string;
 }
 
 export interface UpdateGroupRequestBody {
