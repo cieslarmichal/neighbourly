@@ -71,6 +71,14 @@ export const Navbar: FC = () => {
         <span className="burger-span"></span>
       </div>
       <ul className="hidden sm:flex sm:flex-1 sm:gap-16 sm:justify-end w-full items-center">
+        <li className="text-primary sm:min-w-[7rem] text-center">
+          <Link
+            to={'/groups'}
+            className="[&.active]:font-bold"
+          >
+            Groups
+          </Link>
+        </li>
         <FaUser
           onClick={handleLogout}
           className="cursor-pointer text-2xl sm:text-4xl"
